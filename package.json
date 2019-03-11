@@ -6,8 +6,12 @@
     "express": "^4.16.4",
     "moment": "^2.24.0",
     "react": "^16.8.3",
+    "react-compound-slider": "^1.1.0",
     "react-dom": "^16.8.3",
-    "react-scripts": "2.1.5"
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.5",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.85.0"
   },
   "scripts": {
     "server": "node server/index",
