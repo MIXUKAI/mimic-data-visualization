@@ -12,3 +12,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.pushable:not(body) {
+  transform: none;
+}
+
+.pushable:not(body) > .ui.sidebar,
+.pushable:not(body) > .fixed,
+.pushable:not(body) > .pusher:after {
+  position: fixed;
+  /* top: 80.66px; */
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-between; */
+}

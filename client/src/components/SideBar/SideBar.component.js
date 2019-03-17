@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { Sidebar, Menu, Icon, Input } from 'semantic-ui-react'
+import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react'
 
 import Selector from '../Selector/Selector.component'
 
@@ -14,7 +14,7 @@ const selectOptions = [
   'Sensory Organ Diseaes',
 ]
 
-const VerticalSidebar = ({ visible = true, show = true }) => (
+const VerticalSidebar = ({ visible = false, show = true }) => (
   <Sidebar
     // as={Menu}
     animation="push"
@@ -50,10 +50,7 @@ const VerticalSidebar = ({ visible = true, show = true }) => (
           title="Age"
           slider={{ domain: [0, 120], defaultValues: [20, 80] }}
         />
-        <Selector
-          title="Primary ICD9"
-          selectOptions={selectOptions}
-        />
+        <Selector title="Primary ICD9" selectOptions={selectOptions} />
       </div>
       <Menu.Item as="a">
         <Icon name="home" />
@@ -64,6 +61,9 @@ const VerticalSidebar = ({ visible = true, show = true }) => (
         Instructions
       </Menu.Item>
     </Menu>
+    <Button style={{ width: '98%', padding: '1em 0' }} primary>
+      Plot
+    </Button>
   </Sidebar>
 )
 
@@ -74,12 +74,24 @@ VerticalSidebar.propTypes = {
 }
 
 class PushableSideBar extends Component {
+  state = {
+    visible: false,
+  }
   render() {
     const { visible, children } = this.props
     return (
-      <Sidebar.Pushable>
-        <VerticalSidebar visible={visible} />
-        <Sidebar.Pusher>{children}</Sidebar.Pusher>
+      <Sidebar.Pushable className="sidebar-container">
+        <VerticalSidebar visible={this.state.visible} className="sidebar" />
+        <Sidebar.Pusher>
+          {children}
+          <Button
+            onClick={() => {
+              this.setState(state => ({ visible: !state.visible }))
+            }}
+          >
+            Show SideBar
+          </Button>
+        </Sidebar.Pusher>
       </Sidebar.Pushable>
     )
   }

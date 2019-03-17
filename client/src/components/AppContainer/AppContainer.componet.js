@@ -24,7 +24,7 @@ class DesktopContainer extends Component {
           getWidth={getWidth}
           minWidth={Responsive.onlyTablet.minWidth}
         > */}
-          <Navigator fixed={fixed} />
+          {/* <Navigator fixed={fixed} /> */}
           {children}
         {/* </Responsive> */}
       </div>
