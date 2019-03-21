@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react'
 
 import Selector from '../Selector/Selector.component'
+import ToggleMenuItem from './ToggleMenuItem.component'
 
 const selectOptions = [
   'Infectious or Parasitic Disease',
@@ -34,13 +35,7 @@ const VerticalSidebar = ({ visible = false, show = true }) => (
         <Icon name="home" />
         Instructions
       </Menu.Item>
-      <div
-        style={{
-          display: show ? 'flex' : 'none',
-          flexWrap: 'wrap',
-          flexDirection: 'column',
-        }}
-      >
+      <ToggleMenuItem>
         <Selector
           buttons={['CCU', 'CSRU', 'MICU', 'SICU']}
           title="First ICU Service"
@@ -51,15 +46,7 @@ const VerticalSidebar = ({ visible = false, show = true }) => (
           slider={{ domain: [0, 120], defaultValues: [20, 80] }}
         />
         <Selector title="Primary ICD9" selectOptions={selectOptions} />
-      </div>
-      <Menu.Item as="a">
-        <Icon name="home" />
-        Instructions
-      </Menu.Item>
-      <Menu.Item as="a">
-        <Icon name="home" />
-        Instructions
-      </Menu.Item>
+      </ToggleMenuItem>
     </Menu>
     <Button style={{ width: '98%', padding: '1em 0' }} primary>
       Plot

@@ -1,8 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Container, Header, Button, Icon } from 'semantic-ui-react'
 
 const HomepageHead = ({ mobile }) => (
   <div
+    className="head-container"
     style={{ background: 'black', textAlign: 'center', paddingBottom: '3em' }}
   >
     <Container text>
@@ -10,6 +12,7 @@ const HomepageHead = ({ mobile }) => (
         as="h1"
         content="Mimic-III Database Visualization"
         inverted
+        className="head-title"
         style={{
           fontSize: mobile ? '2em' : '3.5em',
           fontWeight: 'normal',
@@ -20,6 +23,7 @@ const HomepageHead = ({ mobile }) => (
       />
       <Header
         as="h2"
+        className="head-intro"
         content="Do whatever you want when you want to."
         inverted
         style={{
@@ -28,7 +32,7 @@ const HomepageHead = ({ mobile }) => (
           marginTop: mobile ? '0.5em' : '1.5em',
         }}
       />
-      <Button primary size="huge">
+      <Button primary size="huge" as={Link} to="/explore">
         Get Started
         <Icon name="right arrow" />
       </Button>

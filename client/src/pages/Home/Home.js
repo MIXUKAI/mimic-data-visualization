@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Head from '../../components/HomepageHead/HomepageHead.component'
+import Head from './Head.component'
 import { Container, Header } from 'semantic-ui-react'
 
 class HomePage extends Component {
