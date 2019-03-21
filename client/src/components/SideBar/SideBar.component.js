@@ -35,7 +35,7 @@ const VerticalSidebar = ({ visible = false, show = true }) => (
         <Icon name="home" />
         Instructions
       </Menu.Item>
-      <ToggleMenuItem>
+      <ToggleMenuItem itemName="Selection Criteria">
         <Selector
           buttons={['CCU', 'CSRU', 'MICU', 'SICU']}
           title="First ICU Service"
