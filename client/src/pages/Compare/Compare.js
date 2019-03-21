@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import Example from '../../components/Slider/Slider.component'
+import Example from '../../components/Selector/Slider.component'
 
 class Compare extends Component {
   render() {

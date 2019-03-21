@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Header, Checkbox, Button, Segment, Select } from 'semantic-ui-react'
-import Slider from '../Slider/Slider.component'
+
+import Slider from './Slider.component'
 
 class Selector extends Component {
   state = {
