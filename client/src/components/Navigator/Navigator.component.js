@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Visibility, Segment, Menu, Container, Button } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
 class Navigator extends Component {
   render() {
-    const { fixed } = this.props
+    const { fixed, currentView } = this.props
     return (
       <Visibility
         once={false}
@@ -25,15 +26,20 @@ class Navigator extends Component {
             size="large"
           >
             <Container>
-              <Menu.Item as={Link} to="/" active>
-                Home
-              </Menu.Item>
-              <Menu.Item as={Link} to="explore">
-                Explore
-              </Menu.Item>
-              <Menu.Item as={Link} to="compare">
-                Compare
-              </Menu.Item>
+              {[
+                { view: 'Home', route: '/' },
+                { view: 'Explore', route: '/explore' },
+                { view: 'Compare', route: '/compare' },
+              ].map(({ view, route }) => (
+                <Menu.Item
+                  key={view}
+                  as={Link}
+                  to={route}
+                  active={currentView === view}
+                >
+                  {view}
+                </Menu.Item>
+              ))}
               <Menu.Item as="a">Document</Menu.Item>
               <Menu.Item position="right">
                 <Button as="a" inverted={!fixed}>
@@ -56,4 +62,8 @@ class Navigator extends Component {
   }
 }
 
-export default Navigator
+const mapState = state => ({
+  currentView: state.navigator.currentView,
+})
+
+export default connect(mapState)(Navigator)

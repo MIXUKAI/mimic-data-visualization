@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
 import SideBar from '../../components/SideBar/SideBar.component'
 import { Header, Image, Segment } from 'semantic-ui-react'
 import Navigator from '../../components/Navigator/Navigator.component'
+
+import withCurrentView from '../../hoc/withCurrentView'
 
 class Explore extends Component {
   animation = 'push'
@@ -25,4 +29,4 @@ class Explore extends Component {
   }
 }
 
-export default Explore
+export default withCurrentView(Explore)

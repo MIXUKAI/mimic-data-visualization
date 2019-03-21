@@ -1,18 +1,20 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import Example from '../../components/Selector/Slider.component'
+import Navigator from '../../components/Navigator/Navigator.component'
+
+import withCurrentView from '../../hoc/withCurrentView'
 
 class Compare extends Component {
   render() {
     return (
       <div>
+        <Navigator />
         <h2>Compare</h2>
         hello Compare
-        <Example />
       </div>
     )
   }
 }
 
-export default Compare
+export default withCurrentView(Compare)

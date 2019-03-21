@@ -1,9 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react'
 
 import Selector from '../Selector/Selector.component'
 import ToggleMenuItem from './ToggleMenuItem.component'
+
+import { toggleSidebar } from '../SideBar/SideBar.duck'
 
 const selectOptions = [
   'Infectious or Parasitic Disease',
@@ -15,9 +18,8 @@ const selectOptions = [
   'Sensory Organ Diseaes',
 ]
 
-const VerticalSidebar = ({ visible = false, show = true }) => (
+const VerticalSidebar = ({ visible = false }) => (
   <Sidebar
-    // as={Menu}
     animation="push"
     direction="left"
     icon="labeled"
@@ -28,9 +30,6 @@ const VerticalSidebar = ({ visible = false, show = true }) => (
     <Menu vertical style={{ width: '100%', borderRadius: 0 }}>
       <Menu.Item
         as="a"
-        onClick={() => {
-          console.log('sdds')
-        }}
       >
         <Icon name="home" />
         Instructions
@@ -61,19 +60,16 @@ VerticalSidebar.propTypes = {
 }
 
 class PushableSideBar extends Component {
-  state = {
-    visible: false,
-  }
   render() {
-    const { visible, children } = this.props
+    const { visible, children, toggleSidebar } = this.props
     return (
       <Sidebar.Pushable className="sidebar-container">
-        <VerticalSidebar visible={this.state.visible} className="sidebar" />
+        <VerticalSidebar visible={visible} className="sidebar" />
         <Sidebar.Pusher>
           {children}
           <Button
             onClick={() => {
-              this.setState(state => ({ visible: !state.visible }))
+              toggleSidebar()
             }}
           >
             Show SideBar
@@ -84,4 +80,17 @@ class PushableSideBar extends Component {
   }
 }
 
-export default PushableSideBar
+PushableSideBar.propTypes = {
+  visible: PropTypes.bool.isRequired,
+  children: PropTypes.element,
+  toggleSidebar: PropTypes.func,
+}
+
+const mapState = state => ({
+  visible: state.sidebar.isSidebarOpen,
+})
+
+export default connect(
+  mapState,
+  { toggleSidebar }
+)(PushableSideBar)
