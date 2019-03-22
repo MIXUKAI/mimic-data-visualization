@@ -10,8 +10,8 @@ export const select = (name, values) => ({
 
 export const defaultSelector = {
   checked: false,
-  buttonValue: null,
-  optionValue: null,
+  buttonValue: '',
+  optionValue: '',
   sliderValue: [20, 80],
 }
 

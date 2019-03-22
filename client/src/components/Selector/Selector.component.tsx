@@ -1,25 +1,39 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { Checkbox, Button, Segment, Dropdown } from 'semantic-ui-react'
 
 import Slider from './Slider.component'
+
+interface SelectorProps {
+  title: string
+  checked: boolean
+  buttons?: Array<string>
+  options?: Array<object>
+  showSlider?: boolean
+  domain?: [number, number]
+  buttonValue?: string
+  optionValue?: string
+  sliderValue?: [number, number]
+  onButtonClick(event: any): void
+  toggleCheckbox(): void
+  onOptionChange(event: any): void
+  onSliderChange(values: [number, number]): void
+}
 
 export default function Selector({
   title = 'title',
   buttons = [],
   options = [],
-  slider,
+  showSlider = false,
+  domain = [0, 120],
   checked,
   toggleCheckbox,
-  sliderUpdate,
   onButtonClick,
   onOptionChange,
   onSliderChange,
   buttonValue,
   optionValue,
   sliderValue,
-}) {
-
+}: SelectorProps) {
   return (
     <Segment style={{ marginTop: 0, borderRadius: 0, borderRightWidth: 0 }}>
       <p style={{ display: 'flex', alignItems: 'center' }}>
@@ -43,14 +57,13 @@ export default function Selector({
         </Button.Group>
       ) : null}
 
-      {slider ? (
+      {showSlider ? (
         <Slider
           disabled={!checked}
-          update={sliderUpdate}
-          onChange={values => {
+          onChange={(values: [number, number]) => {
             onSliderChange(values)
           }}
-          domain={[0, 120]}
+          domain={domain}
           values={sliderValue}
         />
       ) : null}
@@ -68,20 +81,4 @@ export default function Selector({
       ) : null}
     </Segment>
   )
-}
-
-Selector.propTypes = {
-  title: PropTypes.string.isRequired,
-  checked: PropTypes.bool.isRequired,
-  buttons: PropTypes.array,
-  options: PropTypes.array,
-  slider: PropTypes.object,
-  toggleCheckbox: PropTypes.func,
-  sliderUpdate: PropTypes.func,
-  onButtonClick: PropTypes.func,
-  buttonValue: PropTypes.string,
-  onOptionChange: PropTypes.func,
-  optionValue: PropTypes.string,
-  onSliderChange: PropTypes.func,
-  sliderValue: PropTypes.array,
 }

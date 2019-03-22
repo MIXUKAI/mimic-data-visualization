@@ -42,7 +42,7 @@ const VerticalSidebar = ({ visible = false }) => (
         <Selector buttons={['Male', 'Female']} title="Gender" />
         <Selector
           title="Age"
-          slider={{ domain: [0, 120], defaultValues: [20, 80] }}
+          showSlider
         />
         <Selector title="Primary ICD9" selectOptions={selectOptions} />
       </ToggleMenuItem>
