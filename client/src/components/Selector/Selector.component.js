@@ -1,83 +1,74 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { Header, Checkbox, Button, Segment, Select } from 'semantic-ui-react'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Checkbox, Button, Segment, Select } from 'semantic-ui-react'
 
 import Slider from './Slider.component'
 
-import { select } from './Selector.duck'
+export default function Selector({
+  title = 'title',
+  buttons = [],
+  options = [],
+  slider,
+  checked,
+  toggleCheckbox,
+  sliderUpdate,
+  onButtonClick,
+  buttonValue,
+}) {
+  const { defaultValues = [10, 80], domain = [0, 120] } = slider || {}
 
-class Selector extends Component {
-  update = values => {
-    console.log(values)
-  }
+  return (
+    <Segment style={{ marginTop: 0, borderRadius: 0, borderRightWidth: 0 }}>
+      <p style={{ display: 'flex', alignItems: 'center' }}>
+        <Checkbox toggle onChange={toggleCheckbox} checked={checked} />
+        <span style={{ marginLeft: '10px' }}>{title}</span>
+        {/* {slider ? <span>{}</span>} */}
+      </p>
 
-  toggleCheckbox = () => {
-    const { title, checked } = this.props
-    this.props.select(title, { checked: !checked })
-  }
+      {buttons.length ? (
+        <Button.Group>
+          {buttons.map(btnName => (
+            <Button
+              key={btnName}
+              disabled={!checked}
+              onClick={onButtonClick}
+              active={buttonValue === btnName}
+            >
+              {btnName}
+            </Button>
+          ))}
+        </Button.Group>
+      ) : null}
 
-  renderButtons = () => {
-    const { buttons, checked } = this.props
-    return (
-      <Button.Group>
-        {buttons.map(btnName => (
-          <Button disabled={!checked}>{btnName}</Button>
-        ))}
-      </Button.Group>
-    )
-  }
+      {slider ? (
+        <Slider
+          disabled={!checked}
+          update={sliderUpdate}
+          domain={domain}
+          values={defaultValues}
+        />
+      ) : null}
 
-  render() {
-    const {
-      title = 'title',
-      buttons = [],
-      selectOptions = [],
-      slider,
-      checked,
-    } = this.props
-
-    const { defaultValues = [10, 80], domain = [0, 120] } = slider || {}
-
-    const options = selectOptions.length
-      ? selectOptions.map(v => ({ key: v, text: v, value: v }))
-      : selectOptions
-    return (
-      <Segment style={{ marginTop: 0, borderRadius: 0, borderRightWidth: 0 }}>
-        <p style={{ display: 'flex', alignItems: 'center' }}>
-          <Checkbox toggle onChange={this.toggleCheckbox} checked={checked} />
-          <span style={{ marginLeft: '10px' }}>{title}</span>
-          {/* {slider ? <span>{}</span>} */}
-        </p>
-        {buttons.length ? this.renderButtons() : null}
-        {slider ? (
-          <Slider
-            disabled={!checked}
-            update={this.update}
-            domain={domain}
-            values={defaultValues}
-          />
-        ) : null}
-        {options.length ? (
-          <Select
-            options={options}
-            placeholder="Select you options"
-            style={{ width: '100%' }}
-            disabled={!checked}
-          />
-        ) : null}
-      </Segment>
-    )
-  }
+      {options.length ? (
+        <Select
+          options={options}
+          placeholder="Select you options"
+          style={{ width: '100%' }}
+          disabled={!checked}
+        />
+      ) : null}
+    </Segment>
+  )
 }
 
-const mapState = (state, props) => {
-  const currentSelector = state.userSelect.selected[props.title] || {}
-  return {
-    checked: currentSelector.checked || false,
-  }
+Selector.propTypes = {
+  title: PropTypes.string.isRequired,
+  checked: PropTypes.bool.isRequired,
+  buttons: PropTypes.array,
+  options: PropTypes.array,
+  slider: PropTypes.object,
+  toggleCheckbox: PropTypes.func,
+  sliderUpdate: PropTypes.func,
+  onButtonClick: PropTypes.func,
+  buttonValue: PropTypes.string,
 }
-
-export default connect(
-  mapState,
-  { select }
-)(Selector)

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react'
 
-import Selector from '../Selector/Selector.component'
+import Selector from '../Selector/Selector.container'
 import ToggleMenuItem from './ToggleMenuItem.component'
 
 import { toggleSidebar } from '../SideBar/SideBar.duck'

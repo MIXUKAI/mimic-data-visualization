@@ -3,22 +3,27 @@ import { produce } from 'immer'
 
 const USER_SELECT = 'USER_SELECT'
 
-export const select = (name, value) => ({
+export const select = (name, values) => ({
   type: USER_SELECT,
-  payload: { name, value },
+  payload: { name, values },
 })
 
-const defaultState = {
-  gender: {
-    checked: true,
-    value: 'Male',
-  },
+export const defaultSelector = {
+  checked: false,
+  buttonValue: null,
+  optionValue: null,
+  sliderValue: [0, 0],
 }
 
-const selected = produce((draft = defaultState, { type, payload }) => {
+const selected = produce((draft = {}, { type, payload }) => {
   if (type === USER_SELECT) {
-    const { name, value } = payload
-    draft[name] = value
+    const { name, values } = payload
+
+    draft[name] = draft[name] || { ...defaultSelector }
+
+    Object.keys(values).forEach(k => {
+      draft[name][k] = values[k]
+    })
   }
   return draft
 })
