@@ -1,24 +1,23 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Header, Checkbox, Button, Segment, Select } from 'semantic-ui-react'
 
 import Slider from './Slider.component'
 
-class Selector extends Component {
-  state = {
-    checked: false,
-  }
+import { select } from './Selector.duck'
 
+class Selector extends Component {
   update = values => {
     console.log(values)
   }
 
   toggleCheckbox = () => {
-    this.setState(state => ({ checked: !state.checked }))
+    const { title, checked } = this.props
+    this.props.select(title, { checked: !checked })
   }
 
   renderButtons = () => {
-    const { buttons } = this.props
-    const { checked } = this.state
+    const { buttons, checked } = this.props
     return (
       <Button.Group>
         {buttons.map(btnName => (
@@ -34,8 +33,8 @@ class Selector extends Component {
       buttons = [],
       selectOptions = [],
       slider,
+      checked,
     } = this.props
-    const { checked } = this.state
 
     const { defaultValues = [10, 80], domain = [0, 120] } = slider || {}
 
@@ -71,4 +70,14 @@ class Selector extends Component {
   }
 }
 
-export default Selector
+const mapState = (state, props) => {
+  const currentSelector = state.userSelect.selected[props.title] || {}
+  return {
+    checked: currentSelector.checked || false,
+  }
+}
+
+export default connect(
+  mapState,
+  { select }
+)(Selector)
