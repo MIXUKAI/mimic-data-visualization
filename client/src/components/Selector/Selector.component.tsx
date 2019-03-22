@@ -3,24 +3,24 @@ import { Checkbox, Button, Segment, Dropdown } from 'semantic-ui-react'
 
 import Slider from './Slider.component'
 
-interface SelectorProps {
+interface SelectorProps1 {
   title: string
   checked: boolean
-  buttons?: Array<string>
-  options?: Array<object>
+  buttons?: string[]
+  options?: object[]
   showSlider?: boolean
-  domain?: [number, number]
+  domain?: number[]
   buttonValue?: string
   optionValue?: string
-  sliderValue?: [number, number]
-  onButtonClick(event: any): void
-  toggleCheckbox(): void
-  onOptionChange(event: any): void
-  onSliderChange(values: [number, number]): void
+  sliderValue?: number[]
+  onButtonClick?: (event: any) => void
+  toggleCheckbox?: () => void
+  onOptionChange?: (event: any) => void
+  onSliderChange?: (values: [number, number]) => void
 }
 
 export default function Selector({
-  title = 'title',
+  title,
   buttons = [],
   options = [],
   showSlider = false,
@@ -33,7 +33,7 @@ export default function Selector({
   buttonValue,
   optionValue,
   sliderValue,
-}: SelectorProps) {
+}: SelectorProps1) {
   return (
     <Segment style={{ marginTop: 0, borderRadius: 0, borderRightWidth: 0 }}>
       <p style={{ display: 'flex', alignItems: 'center' }}>
@@ -61,7 +61,7 @@ export default function Selector({
         <Slider
           disabled={!checked}
           onChange={(values: [number, number]) => {
-            onSliderChange(values)
+            onSliderChange!(values)
           }}
           domain={domain}
           values={sliderValue}
