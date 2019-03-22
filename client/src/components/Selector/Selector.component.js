@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Checkbox, Button, Segment, Select } from 'semantic-ui-react'
+import { Checkbox, Button, Segment, Dropdown } from 'semantic-ui-react'
 
 import Slider from './Slider.component'
 
@@ -13,9 +13,12 @@ export default function Selector({
   toggleCheckbox,
   sliderUpdate,
   onButtonClick,
+  onOptionChange,
+  onSliderChange,
   buttonValue,
+  optionValue,
+  sliderValue,
 }) {
-  const { defaultValues = [10, 80], domain = [0, 120] } = slider || {}
 
   return (
     <Segment style={{ marginTop: 0, borderRadius: 0, borderRightWidth: 0 }}>
@@ -44,17 +47,23 @@ export default function Selector({
         <Slider
           disabled={!checked}
           update={sliderUpdate}
-          domain={domain}
-          values={defaultValues}
+          onChange={values => {
+            onSliderChange(values)
+          }}
+          domain={[0, 120]}
+          values={sliderValue}
         />
       ) : null}
 
       {options.length ? (
-        <Select
+        <Dropdown
+          selection
           options={options}
           placeholder="Select you options"
           style={{ width: '100%' }}
           disabled={!checked}
+          onChange={onOptionChange}
+          value={optionValue}
         />
       ) : null}
     </Segment>
@@ -71,4 +80,8 @@ Selector.propTypes = {
   sliderUpdate: PropTypes.func,
   onButtonClick: PropTypes.func,
   buttonValue: PropTypes.string,
+  onOptionChange: PropTypes.func,
+  optionValue: PropTypes.string,
+  onSliderChange: PropTypes.func,
+  sliderValue: PropTypes.array,
 }

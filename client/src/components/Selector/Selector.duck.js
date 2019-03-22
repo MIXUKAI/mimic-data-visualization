@@ -12,7 +12,7 @@ export const defaultSelector = {
   checked: false,
   buttonValue: null,
   optionValue: null,
-  sliderValue: [0, 0],
+  sliderValue: [20, 80],
 }
 
 const selected = produce((draft = {}, { type, payload }) => {

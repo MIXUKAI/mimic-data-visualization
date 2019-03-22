@@ -6,18 +6,26 @@ import Selector from './Selector.component'
 import { select, defaultSelector } from './Selector.duck'
 
 class SelectorContainer extends Component {
-  update = values => {
-    console.log(values)
+  updateState = (k, v) => {
+    const { title } = this.props
+    this.props.select(title, { [k]: v })
   }
 
   toggleCheckbox = () => {
-    const { title, currentSelector } = this.props
-    this.props.select(title, { checked: !currentSelector.checked })
+    const { currentSelector } = this.props
+    this.updateState('checked', !currentSelector.checked)
   }
 
-  handleButtonClick = (e) => {
-    const { title } = this.props
-    this.props.select(title, { buttonValue: e.target.textContent })
+  handleButtonClick = e => {
+    this.updateState('buttonValue', e.target.textContent)
+  }
+
+  handleOptionChange = e => {
+    this.updateState('optionValue', e.target.textContent)
+  }
+
+  handleSliderChange = values => {
+    this.updateState('sliderValue', values)
   }
 
   render() {
@@ -35,6 +43,8 @@ class SelectorContainer extends Component {
         toggleCheckbox={this.toggleCheckbox}
         sliderUpdate={this.update}
         onButtonClick={this.handleButtonClick}
+        onOptionChange={this.handleOptionChange}
+        onSliderChange={this.handleSliderChange}
       />
     )
   }
