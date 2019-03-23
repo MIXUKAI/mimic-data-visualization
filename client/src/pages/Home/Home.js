@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import Head from './Head.component'
 import { Container, Header } from 'semantic-ui-react'
 
-class HomePage extends Component {
+import withCurrentView from '../../hoc/withCurrentView'
+class Home extends Component {
   render() {
     return (
       <div>
@@ -57,4 +58,4 @@ class HomePage extends Component {
   }
 }
 
-export default HomePage
+export default withCurrentView(Home)

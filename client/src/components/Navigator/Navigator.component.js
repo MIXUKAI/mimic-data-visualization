@@ -1,11 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Visibility, Segment, Menu, Container, Button } from 'semantic-ui-react'
+import {
+  Visibility,
+  Segment,
+  Menu,
+  Container,
+  Button,
+  Icon,
+} from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 
+import { toggleSidebar } from '../SideBar/SideBar.duck'
 class Navigator extends Component {
   render() {
-    const { fixed, currentView } = this.props
+    const { fixed = false, currentView, toggleSidebar } = this.props
     return (
       <Visibility
         once={false}
@@ -25,6 +33,13 @@ class Navigator extends Component {
             secondary={!fixed}
             size="large"
           >
+            <Button
+              inverted={!fixed}
+              style={{ marginLeft: '0.5em' }}
+              onClick={() => toggleSidebar()}
+            >
+              <Icon name="sidebar" />
+            </Button>
             <Container>
               {[
                 { view: 'Home', route: '/' },
@@ -66,4 +81,7 @@ const mapState = state => ({
   currentView: state.navigator.currentView,
 })
 
-export default connect(mapState)(Navigator)
+export default connect(
+  mapState,
+  { toggleSidebar }
+)(Navigator)

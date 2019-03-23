@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
 import { Provider } from 'react-redux'
-import AppContainer from './components/AppContainer/AppContainer.componet'
+
+import LayoutContainer from './components/AppContainer/Layout.componet'
 
 import HomePage from './pages/Home/Home'
 import ExplorePage from './pages/Explore/Explore'
@@ -15,11 +16,11 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <AppContainer>
+        <LayoutContainer>
           <Route path="/" exact component={HomePage} />
           <Route path="/explore" component={ExplorePage} />
           <Route path="/compare" component={ComparePage} />
-        </AppContainer>
+        </LayoutContainer>
       </Provider>
     )
   }
