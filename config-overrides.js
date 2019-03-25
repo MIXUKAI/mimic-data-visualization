@@ -2,8 +2,8 @@ const path = require('path')
 
 module.exports = {
   paths: function(paths, env) {
-    paths.appIndexJs = path.resolve(__dirname, 'client/src/index.tsx')
-    paths.appSrc = path.resolve(__dirname, 'client/src')
+    paths.appIndexJs = path.resolve(__dirname, 'client/index.tsx')
+    paths.appSrc = path.resolve(__dirname, 'client')
     return paths
   },
 }
