@@ -1,14 +1,51 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import Head from './Head.component'
 import { Container, Header } from 'semantic-ui-react'
+import { Line } from 'react-chartjs-2'
 
+import { fetchOverview } from './Home.duck'
 import withCurrentView from '../../hoc/withCurrentView'
 class Home extends Component {
+  state = {
+    data: {
+      labels: ['1', '2', '3', '4', '5'],
+      datasets: [
+        {
+          label: 'Video Mades',
+          backgroundColor: 'black',
+          data: [4, 5, 1, 10, 32, 2, 12]
+        },
+        {
+          label: 'Subscriptions',
+          backgroundColor: 'green',
+          data: [3, 32, 19, 9, 22, 2, 12]
+        }
+      ]
+    }
+  }
+
+  componentDidMount() {
+    this.props.fetchOverview()
+  }
+
   render() {
+    const { admission } = this.props
+    const admissionData = admission.length ? admission.map(ad => ad.count) : []
+    console.log(admissionData)
     return (
       <div>
         <Head />
         <Container>
+          <div style={{ position: 'relative', width: 500, height: 400 }}>
+            <h3>Chart Samples</h3>
+            <Line
+              options={{
+                responsive: true
+              }}
+              data={this.state.data}
+            />
+          </div>
           <Header as="h2">Welcome!</Header>
           <p>
             The MIMIC II Visualization tool is a web based tool that allows
@@ -58,4 +95,16 @@ class Home extends Component {
   }
 }
 
-export default withCurrentView(Home)
+const mapState = state => {
+  const { admission } = state.homeOverview
+  return {
+    admission,
+  }
+}
+
+export default withCurrentView(
+  connect(
+    mapState,
+    { fetchOverview }
+  )(Home)
+)
