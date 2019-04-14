@@ -10,8 +10,15 @@ const DB_CONFIG = {
 
 const pool = new Pool(DB_CONFIG)
 
+const { queryPatients, queryPatientsAge, queryIcustays, queryGender } = require('../sql')
+
 pool.on('connect', (client) => {
   client.query('SET search_path TO mimiciii;')
+})
+
+pool.query(queryPatientsAge, null, (err, res) => {
+  err && console.log(err)
+  console.log(res)
 })
 
 // pool.query(
