@@ -2,14 +2,8 @@ import { combineReducers } from 'redux'
 import { produce } from 'immer'
 
 const USER_SELECT = 'USER_SELECT'
-type USER_SELECT = typeof USER_SELECT
 
-export interface Select {
-  type: USER_SELECT
-  payload: object
-}
-
-export const select = (name: string, values: any): Select => ({
+export const select = (name, values) => ({
   type: USER_SELECT,
   payload: { name, values },
 })
@@ -19,18 +13,11 @@ export const defaultSelector = {
   buttonValue: '',
   optionValue: '',
   sliderValue: [20, 80],
-}
-
-export interface SelectState {
-  checked: boolean
-  buttonValue: string
-  optionValue: string
-  sliderValue: number[]
-  [key: string]: any
+  type: 'button',
 }
 
 const selected = produce(
-  (draft = defaultSelector, { type, payload }): SelectState => {
+  (draft = {}, { type, payload }) => {
     if (type === USER_SELECT) {
       const { name, values } = payload
 

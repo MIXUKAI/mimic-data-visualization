@@ -4,6 +4,7 @@ import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react'
 
 import Selector from '../Selector/Selector.container'
 import ToggleMenuItem from './ToggleMenuItem.component'
+import { menus } from '../../config'
 
 const selectOptions = [
   'Infectious or Parasitic Disease',
@@ -15,7 +16,7 @@ const selectOptions = [
   'Sensory Organ Diseaes',
 ]
 
-const VerticalSidebar = ({ visible = false }) => (
+const VerticalSidebar = ({ visible = false, plot }) => (
   <Sidebar
     animation="push"
     direction="left"
@@ -33,13 +34,25 @@ const VerticalSidebar = ({ visible = false }) => (
         <Selector
           buttons={['CCU', 'CSRU', 'MICU', 'SICU']}
           title="First ICU Service"
+          name="icu"
         />
-        <Selector buttons={['Male', 'Female']} title="Gender" />
-        <Selector title="Age" showSlider />
-        <Selector title="Primary ICD9" selectOptions={selectOptions} />
+        <Selector buttons={['Male', 'Female']} title="Gender" name="gender" />
+        <Selector title="Age" name="age" showSlider />
+        <Selector title="Primary ICD9" name="icd9" options={selectOptions} />
       </ToggleMenuItem>
+      {
+        Object.keys(menus).map(groupName => {
+          return (
+            <ToggleMenuItem itemName={groupName} key={groupName}>
+              {menus[groupName].map(({ name, title }) => 
+                <Selector title={title} name={name} key={name} />
+              )}
+            </ToggleMenuItem>
+          )
+        })
+      }
     </Menu>
-    <Button style={{ width: '98%', padding: '1em 0' }} primary>
+    <Button style={{ width: '98%', padding: '1em 0' }} onClick={plot} primary>
       Plot
     </Button>
   </Sidebar>

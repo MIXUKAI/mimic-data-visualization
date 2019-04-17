@@ -6,11 +6,17 @@ import Navigator from '../Navigator/Navigator.component'
 import VerticalSidebar from '../SideBar/SideBar.component'
 
 class PushableSideBar extends Component {
+
+  plot = () => {
+    const { userSelect } = this.props
+    const { icu, icd9, age, gender } = userSelect
+  }
+
   render() {
-    const { visible, children } = this.props
+    const { visible, children, userSelect } = this.props
     return (
       <Sidebar.Pushable className="sidebar-container">
-        <VerticalSidebar visible={visible} className="sidebar" />
+        <VerticalSidebar visible={visible} className="sidebar" plot={this.plot}/>
         <Sidebar.Pusher>
           <Navigator />
           {children}
@@ -22,6 +28,7 @@ class PushableSideBar extends Component {
 
 const mapState = state => ({
   visible: state.sidebar.isSidebarOpen,
+  userSelect: state.userSelect,
 })
 
 export default connect(mapState)(PushableSideBar)
