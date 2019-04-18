@@ -1,32 +1,53 @@
-const { Pool } = require('pg')
+// const { Pool } = require('pg')
+const Sequelize = require('sequelize')
 
-const DB_CONFIG = {
-  user: 'postgres',
-  host: 'localhost',
-  database: 'mimic',
-  password: 'postgres',
-  port: 5432,
-}
-
-const pool = new Pool(DB_CONFIG)
-
-const {
-  queryPatients,
-  queryPatientsAge,
-  queryIcustays,
-  queryIcustays1,
-  queryGender,
-  queryDemographicInformation,
-} = require('../sql')
-
-pool.on('connect', client => {
-  client.query('SET search_path TO mimiciii;')
+const sequelize = new Sequelize('mimic', 'postgres', 'postgres', {
+  dialect: 'postgres',
+  schema: 'mimiciii',
+  define: {
+    timestamps: false,
+  }
 })
 
-pool.query(queryDemographicInformation({age: {left: 40, right: 60, step: 2}}), null, (err, res) => {
-  err && console.log(err)
-  console.log(res)
-})
+const Patients = require('../models/patients')(sequelize, Sequelize)
+const Admissions = require('../models/admissions')(sequelize, Sequelize)
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully')
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database', err)
+  })
+
+// const DB_CONFIG = {
+//   user: 'postgres',
+//   host: 'localhost',
+//   database: 'mimic',
+//   password: 'postgres',
+//   port: 5432,
+// }
+
+// const pool = new Pool(DB_CONFIG)
+
+// const {
+//   queryPatients,
+//   queryPatientsAge,
+//   queryIcustays,
+//   queryIcustays1,
+//   queryGender,
+//   queryDemographicInformation,
+// } = require('../sql')
+
+// pool.on('connect', client => {
+//   client.query('SET search_path TO mimiciii;')
+// })
+
+// pool.query(queryDemographicInformation({ age: { left: 40, right: 60, step: 2 } }), null, (err, res) => {
+//   err && console.log(err)
+//   console.log(res)
+// })
 
 // pool.query(
 //   `SELECT ad.subject_id, ad.hadm_id,
@@ -39,13 +60,19 @@ pool.query(queryDemographicInformation({age: {left: 40, right: 60, step: 2}}), n
 //   }
 // )
 
+// module.exports = {
+//   query: (text, params, cb) => {
+//     const start = Date.now()
+//     return pool.query(text, params, (err, res) => {
+//       const duration = Date.now() - start
+//       console.log('execeted query', { text, duration, rows: res.rowCountF })
+//       cb(err, res)
+//     })
+//   },
+// }
+
 module.exports = {
-  query: (text, params, cb) => {
-    const start = Date.now()
-    return pool.query(text, params, (err, res) => {
-      const duration = Date.now() - start
-      console.log('execeted query', { text, duration, rows: res.rowCountF })
-      cb(err, res)
-    })
-  },
+  Patients,
+  Admissions,
+  sequelize,
 }

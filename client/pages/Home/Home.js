@@ -5,12 +5,12 @@ import { Container, Header } from 'semantic-ui-react'
 import { Pie } from 'react-chartjs-2'
 
 import { getColors } from '../../util/colors'
-import { fetchOverview } from './Home.duck'
+import { overview } from './Home.duck'
 import withCurrentView from '../../hoc/withCurrentView'
 class Home extends Component {
 
   componentDidMount() {
-    this.props.fetchOverview()
+    this.props.overview()
   }
 
   render() {
@@ -89,6 +89,6 @@ const mapState = state => {
 export default withCurrentView(
   connect(
     mapState,
-    { fetchOverview }
+    { overview }
   )(Home)
 )

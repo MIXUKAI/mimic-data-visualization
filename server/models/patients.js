@@ -5,12 +5,14 @@ module.exports = function(sequelize, DataTypes) {
     row_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true
+      // primaryKey: true,
+      unique: true
     },
     subject_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true
+      // unique: true,
+      primaryKey: true,
     },
     gender: {
       type: DataTypes.STRING,
@@ -37,6 +39,6 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false
     }
   }, {
-    tableName: 'patients'
+    tableName: 'patients',
   });
 };
