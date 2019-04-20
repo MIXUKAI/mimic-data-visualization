@@ -44,7 +44,12 @@ export const ORANGE_SCHEMA = {
   ]
 }
 
-export const getColors = () => {
+export const getColors = (len = 4) => {
   const schemas = [BLUE_SCHEMA, PURPLE_SCHEMA, GREEN_SCHEMA, ORANGE_SCHEMA]
-  return schemas.map(s => s.primary)
+  const colors = [...BLUE_SCHEMA.linear, ...PURPLE_SCHEMA.linear, ...GREEN_SCHEMA.linear, ...ORANGE_SCHEMA.linear]
+  const res = []
+  for (let i = 0; i < len; i++) {
+    res.push(colors[i])
+  }
+  return res
 }

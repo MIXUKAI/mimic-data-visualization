@@ -5,13 +5,11 @@ module.exports = function(sequelize, DataTypes) {
     row_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      // primaryKey: true,
       unique: true
     },
     subject_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      // unique: true,
       primaryKey: true,
     },
     gender: {
