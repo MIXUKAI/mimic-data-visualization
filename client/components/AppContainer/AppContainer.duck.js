@@ -3,7 +3,7 @@ import Api from '../../util/fetch'
 
 export const SET_DEMOGRAPHIC = 'SET_DEMOGRAPHIC'
 export const explore = ({ age, icu, gender }) => async (dispatch) => {
-  const { data } = await Api.get('/explore', {
+  const { data } = await Api.get('/explore1', {
     params: {
       age,
       icu,

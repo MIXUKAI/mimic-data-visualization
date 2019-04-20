@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Header, Image, Segment } from 'semantic-ui-react'
+import { Header, Image, Segment, Grid, Container } from 'semantic-ui-react'
 import { Pie } from 'react-chartjs-2'
 
 import withCurrentView from '../../hoc/withCurrentView'
-import { getColors } from '../../util/colors';
+import { getColors } from '../../util/colors'
 
 class Explore extends Component {
   animation = 'push'
@@ -19,7 +19,7 @@ class Explore extends Component {
       result.labels = source.map(pa => pa[type])
       result.datasets.push({
         data: source.map(pa => pa.count),
-        backgroundColor: getColors(source.length)
+        backgroundColor: getColors(source.length),
       })
     }
     return result
@@ -35,31 +35,81 @@ class Explore extends Component {
 
     return (
       <div>
-        <Segment basic>
-          {religion.length ? <Pie
-            height={100}
-            data={religionData}
-          /> : null}
-          {gender.length ? <Pie
-            height={100}
-            data={genderData}
-          /> : null}
-          {ethnicity.length ? <Pie
-            height={100}
-            data={ethnicityData}
-          /> : null}
-          {marital.length ? <Pie
-            height={100}
-            data={maritalData}
-          /> : null}
-          <Image src="https://react.semantic-ui.com/images/wireframe/paragraph.png" />
-        </Segment>
+        {/* <Segment basic> */}
+          <Grid>
+            <Grid.Row columns={3}>
+              <Grid.Column>
+                {religion.length ? (
+                  <Pie
+                    // height={100}
+                    data={religionData}
+                    options={{
+                      title: {
+                        display: true,
+                        text: 'dsdsd',
+                        position: 'left',
+                      },
+                      legend: {
+                        position: 'right',
+                        display: false,
+                      }
+                    }}
+                  />
+                ) : null}
+              </Grid.Column>
+              <Grid.Column>
+                {gender.length ? (
+                  <Pie
+                    // height={100}
+                    data={genderData}
+                    options={{
+                      legend: {
+                        position: 'right',
+                        display: false,
+                      }
+                    }}
+                  />
+                ) : null}
+              </Grid.Column>
+              <Grid.Column>
+                {ethnicity.length ? (
+                  <Pie
+                    // height={100}
+                    data={ethnicityData}
+                    options={{
+                      legend: {
+                        position: 'right',
+                        display: false,
+                      }
+                    }}
+                  />
+                ) : null}
+              </Grid.Column>
+              <Grid.Column>
+                {marital.length ? (
+                  <Pie
+                    // height={100}
+                    data={maritalData}
+                    options={{
+                      legend: {
+                        position: 'right',
+                        display: false,
+                      }
+                    }}
+                  />
+                ) : null}
+              </Grid.Column>
+            </Grid.Row>
+            {/* <Grid.Row columns={2}>
+            </Grid.Row> */}
+          </Grid>
+        {/* </Segment> */}
       </div>
     )
   }
 }
 
-const mapState = (state) => ({
+const mapState = state => ({
   demographic: state.explore.demographic,
 })
 
