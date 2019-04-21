@@ -1,16 +1,19 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Header, Image, Segment, Grid, Container } from 'semantic-ui-react'
+import { Header, Image, Segment, Grid, Container, Button } from 'semantic-ui-react'
 import { Pie } from 'react-chartjs-2'
 
 import withCurrentView from '../../hoc/withCurrentView'
 import { getColors } from '../../util/colors'
+import Modal from '../../components/Modal/Modal.component'
+import './Explore.css'
 
 class Explore extends Component {
   animation = 'push'
 
   state = {
     visible: true,
+    modalIsOpen: false,
   }
 
   formatDemographicData = (source = [], type) => {
@@ -25,6 +28,14 @@ class Explore extends Component {
     return result
   }
 
+  openModal = () => {
+    this.setState({ modalIsOpen: true })
+  }
+
+  closeModal = () => {
+    this.setState({ modalIsOpen: false })
+  }
+
   render() {
     console.log(this.props.demographic)
     const { religion, gender, ethnicity, marital } = this.props.demographic
@@ -36,73 +47,99 @@ class Explore extends Component {
     return (
       <div>
         {/* <Segment basic> */}
-          <Grid>
-            <Grid.Row columns={3}>
-              <Grid.Column>
-                {religion.length ? (
-                  <Pie
-                    // height={100}
-                    data={religionData}
-                    options={{
-                      title: {
-                        display: true,
-                        text: 'dsdsd',
-                        position: 'left',
-                      },
-                      legend: {
-                        position: 'right',
-                        display: false,
-                      }
-                    }}
-                  />
-                ) : null}
-              </Grid.Column>
-              <Grid.Column>
-                {gender.length ? (
-                  <Pie
-                    // height={100}
-                    data={genderData}
-                    options={{
-                      legend: {
-                        position: 'right',
-                        display: false,
-                      }
-                    }}
-                  />
-                ) : null}
-              </Grid.Column>
-              <Grid.Column>
-                {ethnicity.length ? (
-                  <Pie
-                    // height={100}
-                    data={ethnicityData}
-                    options={{
-                      legend: {
-                        position: 'right',
-                        display: false,
-                      }
-                    }}
-                  />
-                ) : null}
-              </Grid.Column>
-              <Grid.Column>
-                {marital.length ? (
-                  <Pie
-                    // height={100}
-                    data={maritalData}
-                    options={{
-                      legend: {
-                        position: 'right',
-                        display: false,
-                      }
-                    }}
-                  />
-                ) : null}
-              </Grid.Column>
-            </Grid.Row>
-            {/* <Grid.Row columns={2}>
+        <Button onClick={this.openModal}>open modal</Button>
+        <Modal
+          isOpen={this.state.modalIsOpen}
+          // onAfterOpen={this.afterOpenModal}
+          onRequestClose={this.closeModal}
+          contentLabel="Example Modal"
+          className="Modal"
+          overlayClassName="Overlay"
+        >
+
+          <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
+          <button onClick={this.closeModal}>close</button>
+          {ethnicity.length ? (
+            <Pie
+              height={100}
+              data={ethnicityData}
+              options={{
+                legend: {
+                  position: 'right',
+                }
+              }}
+            />
+          ) : null}>
+        </Modal>
+
+        <Grid>
+          <Grid.Row columns={3}>
+            <Grid.Column>
+              {religion.length ? (
+                <Pie
+                  // height={100}
+                  onElementsClick={this.openModal}
+                  data={religionData}
+                  options={{
+                    title: {
+                      display: true,
+                      text: 'dsdsd',
+                      position: 'left',
+                    },
+                    legend: {
+                      position: 'right',
+                      display: false,
+                    }
+                  }}
+                />
+              ) : null}
+            </Grid.Column>
+            <Grid.Column>
+              {gender.length ? (
+                <Pie
+                  // height={100}
+                  data={genderData}
+                  options={{
+                    legend: {
+                      position: 'right',
+                      display: false,
+                    }
+                  }}
+                />
+              ) : null}
+            </Grid.Column>
+            <Grid.Column>
+              {ethnicity.length ? (
+                <Pie
+                  // height={100}
+                  data={ethnicityData}
+                  options={{
+                    legend: {
+                      position: 'right',
+                      display: false,
+                    }
+                  }}
+                />
+              ) : null}
+            </Grid.Column>
+            <Grid.Column>
+              {marital.length ? (
+                <Pie
+                  // height={100}
+                  data={maritalData}
+                  options={{
+                    legend: {
+                      position: 'right',
+                      display: false,
+                    }
+                  }}
+                />
+              ) : null}
+            </Grid.Column>
+          </Grid.Row>
+          {/* <Grid.Row columns={2}>
             </Grid.Row> */}
-          </Grid>
+        </Grid>
         {/* </Segment> */}
       </div>
     )
