@@ -12,6 +12,7 @@ export const defaultSelector = {
   checked: false,
   buttonValue: '',
   optionValue: '',
+  inputValue: '',
   sliderValue: [20, 80],
   type: 'button',
 }

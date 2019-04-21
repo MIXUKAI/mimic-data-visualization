@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import debounce from 'lodash/debounce'
 import { connect } from 'react-redux'
 
 import Selector from './Selector.component'
@@ -6,9 +7,15 @@ import Selector from './Selector.component'
 import { select, defaultSelector } from './Selector.duck'
 
 class SelectorContainer extends Component {
-  updateState = (k, v, type = 'button') => {
+  constructor(props) {
+    super(props)
+    this.debouncedUpdate = debounce(this.updateState, 1000).bind(this)
+  }
+
+  updateState = (k, v, type = 'button', cb) => {
     const { name } = this.props
     this.props.select(name, { [k]: v, type })
+    cb && cb(v)
   }
 
   toggleCheckbox = () => {
@@ -16,16 +23,22 @@ class SelectorContainer extends Component {
     this.updateState('checked', !currentSelector.checked)
   }
 
-  handleButtonClick = (e) => {
+  handleButtonClick = e => {
     this.updateState('buttonValue', e.target.textContent, 'button')
   }
 
-  handleOptionChange = (e) => {
+  handleOptionChange = e => {
     this.updateState('optionValue', e.target.textContent, 'option')
   }
 
-  handleSliderChange = (values) => {
+  handleSliderChange = values => {
     this.updateState('sliderValue', values, 'slider')
+  }
+
+  handleInputChange = e => {
+    this.debouncedUpdate('inputValue', e.target.value, 'input', (value) => {
+      this.props.onInputChanged && this.props.onInputChanged(value)
+    })
   }
 
   render() {
@@ -44,6 +57,7 @@ class SelectorContainer extends Component {
         onButtonClick={this.handleButtonClick}
         onOptionChange={this.handleOptionChange}
         onSliderChange={this.handleSliderChange}
+        onInputChange={this.handleInputChange}
       />
     )
   }
@@ -52,6 +66,7 @@ class SelectorContainer extends Component {
 const mapState = (state, props) => {
   return {
     currentSelector: state.userSelect.selected[props.name] || defaultSelector,
+    icdSearched: state.explore.icdSearched,
   }
 }
 

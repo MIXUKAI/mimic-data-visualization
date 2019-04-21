@@ -6,6 +6,7 @@ const Op = Sequelize.Op
 const { Admissions, sequelize } = require('./db')
 const Patients = require('./models/patients')(sequelize, Sequelize)
 const ICUStays = require('./models/icustays')(sequelize, Sequelize)
+const DICD = require('./models/d_icd_diagnoses')(sequelize, Sequelize)
 
 Patients.hasMany(Admissions, { foreignKey: 'subject_id' })
 Patients.hasMany(ICUStays, { foreignKey: 'subject_id' })
@@ -43,7 +44,7 @@ app.get('/api/overview', (req, res) => {
 
 const attributes = ['subject_id', 'gender', 'admissions.religion']
 
-function queryDemographic(req, type) {
+function queryDemographic(req, type, options = { attributes: [] }) {
   return new Promise((resolve, reject) => {
     Patients.findAll({
       include: [
@@ -52,20 +53,26 @@ function queryDemographic(req, type) {
           where: {
             first_careunit: req.query.icu,
           },
+          required: true,
           attributes: [],
           duplicating: false,
         },
         {
           model: Admissions,
-          required: true,
           attributes: [],
+          where: {
+            [Op.and]: [
+              Sequelize.literal(`ROUND(CAST(EXTRACT(EPOCH FROM admissions.admittime-patients.dob) AS NUMERIC) / (60*60*24*365.252), 3) >= ${req.query.age[0]}`),
+              Sequelize.literal(`ROUND(CAST(EXTRACT(EPOCH FROM admissions.admittime-patients.dob) AS NUMERIC) / (60*60*24*365.252), 3) <= ${req.query.age[1]}`),
+            ]
+          },
           duplicating: false,
         },
       ],
       where: {
         gender: req.query.gender,
       },
-      attributes: [type, [sequelize.fn('count', type), 'count']],
+      attributes: [type, [sequelize.fn('count', type), 'count'], ...options.attributes],
       group: type,
       raw: true,
     }).then(resolve)
@@ -122,6 +129,22 @@ app.get('/api/explore1', async (req, res) => {
     .then(res => {
       console.log(res)
     })
+})
+
+app.get('/api/icd/search', (req, res) => {
+  DICD.findAll({
+    where: {
+      short_title: {
+        [Op.like]: `%${req.query.icd}%`
+      }
+    },
+    row: true,
+    limit: 10,
+  })
+  .then(result => {
+    console.log(result)
+    res.status(200).json(result)
+  })
 })
 
 const PORT = process.env.PORT || 8080

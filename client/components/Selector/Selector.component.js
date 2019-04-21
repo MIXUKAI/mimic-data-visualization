@@ -1,5 +1,5 @@
 import React from 'react'
-import { Checkbox, Button, Segment, Dropdown } from 'semantic-ui-react'
+import { Checkbox, Button, Segment, Dropdown, Input } from 'semantic-ui-react'
 
 import Slider from './Slider.component'
 
@@ -14,9 +14,12 @@ export default function Selector({
   onButtonClick,
   onOptionChange,
   onSliderChange,
+  onInputChange,
   buttonValue,
   optionValue,
   sliderValue,
+  input,
+  icdSearched,
 }) {
   return (
     <Segment style={{ marginTop: 0, borderRadius: 0, borderRightWidth: 0 }}>
@@ -44,7 +47,7 @@ export default function Selector({
       {showSlider ? (
         <Slider
           disabled={!checked}
-          onChange={(values) => {
+          onChange={values => {
             onSliderChange(values)
           }}
           domain={domain}
@@ -62,6 +65,27 @@ export default function Selector({
           onChange={onOptionChange}
           value={optionValue}
         />
+      ) : null}
+      {input ? (
+        <>
+          <Input
+            list="datalist"
+            icon="search"
+            placeholder="Search..."
+            style={{ width: '100%' }}
+            onChange={onInputChange}
+          />
+          <datalist id="datalist">
+            {icdSearched.length
+              ? icdSearched.map(icd => (
+                <option value={icd.short_title} key={icd.icd9_code} />
+              ))
+              : []}
+            {/* <option value='English' />
+            <option value='Chinese' />
+            <option value='Dutch' /> */}
+          </datalist>
+        </>
       ) : null}
     </Segment>
   )

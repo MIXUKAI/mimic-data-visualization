@@ -16,7 +16,7 @@ const selectOptions = [
   'Sensory Organ Diseaes',
 ]
 
-const VerticalSidebar = ({ visible = false, plot }) => (
+const VerticalSidebar = ({ visible = false, plot, searchICD }) => (
   <Sidebar
     animation="push"
     direction="left"
@@ -39,18 +39,22 @@ const VerticalSidebar = ({ visible = false, plot }) => (
         <Selector buttons={['Male', 'Female']} title="Gender" name="gender" />
         <Selector title="Age" name="age" showSlider />
         <Selector title="Primary ICD9" name="icd9" options={selectOptions} />
+        <Selector
+          title="search ICD"
+          name="searchICD"
+          input
+          onInputChanged={searchICD}
+        />
       </ToggleMenuItem>
-      {
-        Object.keys(menus).map(groupName => {
-          return (
-            <ToggleMenuItem itemName={groupName} key={groupName}>
-              {menus[groupName].map(({ name, title }) => 
-                <Selector title={title} name={name} key={name} />
-              )}
-            </ToggleMenuItem>
-          )
-        })
-      }
+      {Object.keys(menus).map(groupName => {
+        return (
+          <ToggleMenuItem itemName={groupName} key={groupName}>
+            {menus[groupName].map(({ name, title }) => (
+              <Selector title={title} name={name} key={name} />
+            ))}
+          </ToggleMenuItem>
+        )
+      })}
     </Menu>
     <Button style={{ width: '98%', padding: '1em 0' }} onClick={plot} primary>
       Plot
