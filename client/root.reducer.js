@@ -5,6 +5,7 @@ import navigator from './components/Navigator/Navigator.duck'
 import userSelect from './components/Selector/Selector.duck'
 import homeOverview  from './pages/Home/Home.duck'
 import explore from './components/AppContainer/AppContainer.duck'
+import chart from './components/Chart/Chart.duck'
 
 export default combineReducers({
   sidebar,
@@ -12,4 +13,5 @@ export default combineReducers({
   userSelect,
   homeOverview,
   explore,
+  chart,
 })

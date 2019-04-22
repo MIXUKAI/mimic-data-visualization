@@ -21,7 +21,7 @@ const age1 = `ROUND(CAST(EXTRACT(EPOCH FROM admittime-dob) AS NUMERIC) / (60*60*
 
 const app = express()
 
-app.all('*', function (req, res, next) {
+app.all('*', function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'X-Requested-With')
   res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
@@ -67,12 +67,12 @@ function queryDemographic(req, type, options = { attributes: [] }) {
             [Op.and]: [
               Sequelize.literal(
                 `ROUND(CAST(EXTRACT(EPOCH FROM admissions.admittime-patients.dob) AS NUMERIC) / (60*60*24*365.252), 3) >= ${
-                req.query.age[0]
+                  req.query.age[0]
                 }`
               ),
               Sequelize.literal(
                 `ROUND(CAST(EXTRACT(EPOCH FROM admissions.admittime-patients.dob) AS NUMERIC) / (60*60*24*365.252), 3) <= ${
-                req.query.age[1]
+                  req.query.age[1]
                 }`
               ),
             ],
@@ -107,7 +107,8 @@ function queryAge(req, step) {
   return new Promise(async (resolve, reject) => {
     // await sequelize.query('set search_path to mimiciii;')
     sequelize
-      .query(`
+      .query(
+        `
         select
           count(*),
           ${range(age1, req.query.age[0], req.query.age[1], step).slice(0, -1)} 
@@ -125,7 +126,8 @@ function queryAge(req, step) {
           where patients.gender='${req.query.gender}' 
           group by patients.subject_id
         ) as res;
-      `)
+      `
+      )
       .then(resolve)
       .catch(err => {
         console.log(err)
@@ -164,7 +166,6 @@ function queryEvents(req, range, field = 'max', itemid = 211) {
   })
 }
 
-
 app.get('/api/explore', (req, res) => {
   console.log(req.query)
   console.log(range(age1, req.query.age[0], req.query.age[1]))
@@ -200,6 +201,7 @@ app.get('/api/explore', (req, res) => {
     queryDemographic(req, 'admissions.admission_type'),
     queryDemographic(req, 'admissions.admission_location'),
     queryDemographic(req, 'admissions.insurance'),
+    queryDemographic(req, 'icustays.first_careunit'),
   ]).then(
     ([
       religion,
@@ -210,6 +212,7 @@ app.get('/api/explore', (req, res) => {
       admissionType,
       admissionLocation,
       insurance,
+      icutype,
     ]) => {
       console.log(
         religion,
@@ -219,14 +222,25 @@ app.get('/api/explore', (req, res) => {
         marital,
         admissionType,
         admissionLocation,
-        insurance
+        insurance,
+        icutype
       )
-      res.status(200).json({ religion, gender, age: age[1].rows, ethnicity, marital })
+      res
+        .status(200)
+        .json({
+          religion,
+          gender,
+          age: age[1].rows,
+          ethnicity,
+          marital,
+          admissionType,
+          admissionLocation,
+          insurance,
+          icutype,
+        })
     }
   )
 })
-
-
 
 // ${range('valuenum').slice(0, -1)}
 app.get('/api/explore1', async (req, res) => {

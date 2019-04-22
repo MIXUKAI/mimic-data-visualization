@@ -1,11 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Header, Image, Segment, Grid, Container, Button } from 'semantic-ui-react'
+import {
+  Header,
+  Image,
+  Segment,
+  Grid,
+  Container,
+  Button,
+} from 'semantic-ui-react'
 import { Pie, Bar } from 'react-chartjs-2'
 
 import withCurrentView from '../../hoc/withCurrentView'
 import { getColors } from '../../util/colors'
 import Modal from '../../components/Modal/Modal.component'
+import MyChart from '../../components/Chart/Chart'
+import { setModalOpen } from '../../components/Chart/Chart.duck'
 import './Explore.css'
 
 class Explore extends Component {
@@ -13,7 +22,6 @@ class Explore extends Component {
 
   state = {
     visible: true,
-    modalIsOpen: false,
   }
 
   formatDemographicData = (source = [], type) => {
@@ -28,136 +36,100 @@ class Explore extends Component {
     return result
   }
 
-  openModal = () => {
-    this.setState({ modalIsOpen: true })
-  }
-
-  closeModal = () => {
-    this.setState({ modalIsOpen: false })
-  }
-
   render() {
     console.log(this.props.demographic)
-    const { religion, gender, ethnicity, marital, age } = this.props.demographic
+    const { modal } = this.props
+    const {
+      religion,
+      gender,
+      ethnicity,
+      marital,
+      age,
+      icutype = [],
+      insurance = [],
+      admissionType = [],
+      admissionLocation = [],
+    } = this.props.demographic
     console.log(age)
     const ageData = { labels: [], datasets: [] }
-    ageData.labels = age.length ? Object.keys(age[0]).filter(key => key !== 'count') : []
+    ageData.labels = age.length
+      ? Object.keys(age[0]).filter(key => key !== 'count')
+      : []
     ageData.datasets.push({
-      data: age.length ? Object.keys(age[0]).filter(k => k !== 'count').map(k => age[0][k]) : [],
-      backgroundColor: getColors(age.length ? Object.keys(age[0]).filter(k  => k !== 'count').length : 0)
+      data: age.length
+        ? Object.keys(age[0])
+          .filter(k => k !== 'count')
+          .map(k => age[0][k])
+        : [],
+      backgroundColor: getColors(
+        age.length ? Object.keys(age[0]).filter(k => k !== 'count').length : 0
+      ),
     })
     console.log(ageData)
-    // const ageData = Object.keys(age[0]).filter(key => key !== 'count').map(key => ({}))
     const religionData = this.formatDemographicData(religion, 'religion')
     const genderData = this.formatDemographicData(gender, 'gender')
     const ethnicityData = this.formatDemographicData(ethnicity, 'ethnicity')
     const maritalData = this.formatDemographicData(marital, 'marital_status')
+    const icutypeData = this.formatDemographicData(icutype, 'first_careunit')
+    const adLocationData = this.formatDemographicData(
+      admissionLocation,
+      'admission_location'
+    )
+    const adTypeData = this.formatDemographicData(
+      admissionType,
+      'admission_type'
+    )
+    const insuranceData = this.formatDemographicData(insurance, 'insurance')
+
+    let ModalChart = Pie
+    if (modal.type === 'Bar') {
+      ModalChart = Bar
+    }
 
     return (
-      <div>
-        {/* <Segment basic> */}
-        <Button onClick={this.openModal}>open modal</Button>
+      <div style={{ padding: '0 80px' }}>
         <Modal
-          isOpen={this.state.modalIsOpen}
+          isOpen={modal.open}
           // onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
           contentLabel="Example Modal"
           className="Modal"
           overlayClassName="Overlay"
         >
-
-          <h2 ref={subtitle => this.subtitle = subtitle}>Hello</h2>
-          <button onClick={this.closeModal}>close</button>
-          {ethnicity.length ? (
-            <Pie
+          <h2 ref={subtitle => (this.subtitle = subtitle)}>Hello</h2>
+          <button onClick={() => this.props.setModalOpen({ open: false })}>close</button>
+          {modal.data.datasets.length ? (
+            <ModalChart
               height={100}
-              data={ethnicityData}
+              data={modal.data}
               options={{
                 legend: {
                   position: 'right',
-                }
+                },
               }}
             />
-          ) : null}>
+          ) : null}
+          >
         </Modal>
 
         <Grid>
           <Grid.Row columns={3}>
-            <Grid.Column>
-              {religion.length ? (
-                <Pie
-                  // height={100}
-                  onElementsClick={this.openModal}
-                  data={religionData}
-                  options={{
-                    title: {
-                      display: true,
-                      text: 'dsdsd',
-                      position: 'left',
-                    },
-                    legend: {
-                      position: 'right',
-                      display: false,
-                    }
-                  }}
-                />
-              ) : null}
-            </Grid.Column>
-            <Grid.Column>
-              {gender.length ? (
-                <Pie
-                  // height={100}
-                  data={genderData}
-                  options={{
-                    legend: {
-                      position: 'right',
-                      display: false,
-                    }
-                  }}
-                />
-              ) : null}
-            </Grid.Column>
-            <Grid.Column>
-              {ethnicity.length ? (
-                <Pie
-                  // height={100}
-                  data={ethnicityData}
-                  options={{
-                    legend: {
-                      position: 'right',
-                      display: false,
-                    }
-                  }}
-                />
-              ) : null}
-            </Grid.Column>
-            <Grid.Column>
-              {marital.length ? (
-                <Pie
-                  // height={100}
-                  data={maritalData}
-                  options={{
-                    legend: {
-                      position: 'right',
-                      display: false,
-                    }
-                  }}
-                />
-              ) : null}
-            </Grid.Column>
-            <Grid.Column>
-              {
-                age.length ? (
-                  <Bar
-                    // height={100}
-                    data={ageData}
-                  />
-                ) : null
-              }
-            </Grid.Column>
+            <MyChart
+              onElementsClick={this.openModal}
+              data={religionData}
+            />
+            <MyChart
+              data={genderData}
+            />
+            <MyChart data={ethnicityData} />
+            <MyChart data={maritalData} />
+            <MyChart data={ageData} type="Bar" />
+            <MyChart data={insuranceData} />
+            <MyChart data={adLocationData} />
+            <MyChart data={adTypeData} />
+            <MyChart data={icutypeData} type="Bar" />
           </Grid.Row>
         </Grid>
-        {/* </Segment> */}
       </div>
     )
   }
@@ -165,6 +137,7 @@ class Explore extends Component {
 
 const mapState = state => ({
   demographic: state.explore.demographic,
+  modal: state.chart.modal,
 })
 
-export default connect(mapState)(withCurrentView(Explore))
+export default connect(mapState, { setModalOpen })(withCurrentView(Explore))
