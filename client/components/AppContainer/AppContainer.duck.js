@@ -29,6 +29,7 @@ export const searchICD = text => async dispatch => {
 const defaultDemographicState = {
   gender: [],
   religion: [],
+  age: [],
   ethnicity: [],
   marital: [],
 }

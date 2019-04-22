@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Header, Image, Segment, Grid, Container, Button } from 'semantic-ui-react'
-import { Pie } from 'react-chartjs-2'
+import { Pie, Bar } from 'react-chartjs-2'
 
 import withCurrentView from '../../hoc/withCurrentView'
 import { getColors } from '../../util/colors'
@@ -38,7 +38,16 @@ class Explore extends Component {
 
   render() {
     console.log(this.props.demographic)
-    const { religion, gender, ethnicity, marital } = this.props.demographic
+    const { religion, gender, ethnicity, marital, age } = this.props.demographic
+    console.log(age)
+    const ageData = { labels: [], datasets: [] }
+    ageData.labels = age.length ? Object.keys(age[0]).filter(key => key !== 'count') : []
+    ageData.datasets.push({
+      data: age.length ? Object.keys(age[0]).filter(k => k !== 'count').map(k => age[0][k]) : [],
+      backgroundColor: getColors(age.length ? Object.keys(age[0]).filter(k  => k !== 'count').length : 0)
+    })
+    console.log(ageData)
+    // const ageData = Object.keys(age[0]).filter(key => key !== 'count').map(key => ({}))
     const religionData = this.formatDemographicData(religion, 'religion')
     const genderData = this.formatDemographicData(gender, 'gender')
     const ethnicityData = this.formatDemographicData(ethnicity, 'ethnicity')
@@ -136,9 +145,17 @@ class Explore extends Component {
                 />
               ) : null}
             </Grid.Column>
+            <Grid.Column>
+              {
+                age.length ? (
+                  <Bar
+                    // height={100}
+                    data={ageData}
+                  />
+                ) : null
+              }
+            </Grid.Column>
           </Grid.Row>
-          {/* <Grid.Row columns={2}>
-            </Grid.Row> */}
         </Grid>
         {/* </Segment> */}
       </div>
