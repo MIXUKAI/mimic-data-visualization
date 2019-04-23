@@ -39,7 +39,7 @@ class PushableSideBar extends Component {
   }
 
   render() {
-    const { visible, children, searchICD, icdSearched } = this.props
+    const { visible, children, searchICD, icdSearched, isFetching } = this.props
     return (
       <Sidebar.Pushable className="sidebar-container">
         <VerticalSidebar
@@ -47,6 +47,7 @@ class PushableSideBar extends Component {
           className="sidebar"
           plot={this.plot}
           searchICD={searchICD}
+          isFetching={isFetching}
         />
         <Sidebar.Pusher>
           <Navigator />
@@ -60,6 +61,7 @@ class PushableSideBar extends Component {
 const mapState = state => ({
   visible: state.sidebar.isSidebarOpen,
   userSelect: state.userSelect.selected,
+  isFetching: state.explore.isFetching,
 })
 
 export default connect(

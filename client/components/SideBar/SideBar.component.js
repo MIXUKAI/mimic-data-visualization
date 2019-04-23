@@ -16,7 +16,7 @@ const selectOptions = [
   'Sensory Organ Diseaes',
 ]
 
-const VerticalSidebar = ({ visible = false, plot, searchICD }) => (
+const VerticalSidebar = ({ visible = false, plot, searchICD, isFetching }) => (
   <Sidebar
     animation="push"
     direction="left"
@@ -56,7 +56,12 @@ const VerticalSidebar = ({ visible = false, plot, searchICD }) => (
         )
       })}
     </Menu>
-    <Button style={{ width: '98%', padding: '1em 0' }} onClick={plot} primary>
+    <Button
+      style={{ width: '98%', padding: '1em 0' }}
+      onClick={plot}
+      primary
+      loading={isFetching}
+    >
       Plot
     </Button>
   </Sidebar>
