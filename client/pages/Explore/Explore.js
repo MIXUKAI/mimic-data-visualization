@@ -7,6 +7,7 @@ import {
   Grid,
   Container,
   Button,
+  Icon,
 } from 'semantic-ui-react'
 import { Pie, Bar } from 'react-chartjs-2'
 
@@ -58,8 +59,8 @@ class Explore extends Component {
     ageData.datasets.push({
       data: age.length
         ? Object.keys(age[0])
-          .filter(k => k !== 'count')
-          .map(k => age[0][k])
+            .filter(k => k !== 'count')
+            .map(k => age[0][k])
         : [],
       backgroundColor: getColors(
         age.length ? Object.keys(age[0]).filter(k => k !== 'count').length : 0
@@ -97,7 +98,9 @@ class Explore extends Component {
           overlayClassName="Overlay"
         >
           <h2 ref={subtitle => (this.subtitle = subtitle)}>Hello</h2>
-          <button onClick={() => this.props.setModalOpen({ open: false })}>close</button>
+          <button onClick={() => this.props.setModalOpen({ open: false })}>
+            close
+          </button>
           {modal.data.datasets.length ? (
             <ModalChart
               height={100}
@@ -112,18 +115,23 @@ class Explore extends Component {
           >
         </Modal>
 
-        <Grid>
+        <Grid style={{ margin: '50px 0' }}>
+          <Header as="h2">
+            <Icon name="users" />
+            <Header.Content>
+              Demographic Information
+              <Header.Subheader>人口统计信息</Header.Subheader>
+            </Header.Content>
+          </Header>
           <Grid.Row columns={3}>
-            <MyChart
-              onElementsClick={this.openModal}
-              data={religionData}
-            />
-            <MyChart
-              data={genderData}
-            />
+            <MyChart onElementsClick={this.openModal} data={religionData} />
+            <MyChart data={genderData} />
             <MyChart data={ethnicityData} />
             <MyChart data={maritalData} />
             <MyChart data={ageData} type="Bar" />
+          </Grid.Row>
+          <Header size="medium">Administrative Information</Header>
+          <Grid.Row columns={3}>
             <MyChart data={insuranceData} />
             <MyChart data={adLocationData} />
             <MyChart data={adTypeData} />
@@ -140,4 +148,7 @@ const mapState = state => ({
   modal: state.chart.modal,
 })
 
-export default connect(mapState, { setModalOpen })(withCurrentView(Explore))
+export default connect(
+  mapState,
+  { setModalOpen }
+)(withCurrentView(Explore))

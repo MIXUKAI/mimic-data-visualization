@@ -105,7 +105,6 @@ function range(value, min = 25, max = 140, step = 15) {
 }
 function queryAge(req, step) {
   return new Promise(async (resolve, reject) => {
-    // await sequelize.query('set search_path to mimiciii;')
     sequelize
       .query(
         `
@@ -135,27 +134,26 @@ function queryAge(req, step) {
   })
 }
 
-function queryEvents(req, range, field = 'max', itemid = 211) {
+function queryEvents(req, step, field = 'max', itemid = 211) {
   return new Promise(async (resolve, reject) => {
-    await sequelize.query('set search_path to mimiciii;')
     sequelize
       .query(
         `
     select
       count(*),
-      ${range('max').slice(0, -1)} 
+      ${range('valuenum').slice(0, -1)} 
     from (
       select 
-        ist.subject_id,
-        ${field}(valuenum) 
-      from icustays as ist inner join patients 
-      on patients.subject_id=ist.subject_id
-      and patients.gender=:gender
-      inner join chartevents_3 on ist.subject_id=chartevents_3.subject_id 
+        icustays.subject_id,
+        ${field}(valuenum) as valuenum
+      from mimiciii.icustays as icustays inner join mimiciii.patients as patients  
+      on patients.subject_id=icustays.subject_id 
+      and patients.gender=:gender 
+      inner join mimiciii.chartevents_3 as chartevents_3 on icustays.subject_id=chartevents_3.subject_id 
       and chartevents_3.itemid=${itemid} 
-      where ist.first_careunit=:icu 
-      group by ist.subject_id
-    ) as mypa;
+      where icustays.first_careunit=:icu 
+      group by icustays.subject_id
+    ) as res;
     `,
         {
           raw: true,
@@ -166,6 +164,64 @@ function queryEvents(req, range, field = 'max', itemid = 211) {
   })
 }
 
+const queryHospitalLos = (req, step) => {
+  return new Promise(async (resolve, reject) => {
+    sequelize
+      .query(
+        `select 
+          count(*),
+          ${range('hosLos', 1, 38, step).slice(0, -1)} 
+        from(
+          select 
+            patients.subject_id,
+            round(cast(extract(epoch from dischtime-admittime) as numeric) / (60*60*24), 2) as hosLos,
+            round(cast(extract(epoch from outtime-intime) as numeric) / (60*60*24), 2) as icuLos 
+          from mimiciii.admissions as admissions inner join mimiciii.patients as patients 
+            on patients.subject_id=admissions.subject_id and 
+            ${age} >= ${req.query.age[0]} and ${age} <= ${req.query.age[1]} 
+            inner join mimiciii.icustays as icustays 
+            on icustays.subject_id=patients.subject_id and
+            icustays.first_careunit='${req.query.icu}'
+          where patients.gender='${req.query.gender}'
+        ) as res limit 10;
+      `
+      )
+      .then(resolve)
+      .catch(err => {
+        console.log(err)
+      })
+  })
+}
+
+const queryICULos = (req, step) => {
+  return new Promise(async (resolve, reject) => {
+    sequelize
+      .query(
+        `select 
+          count(*),
+          ${range('icuLos', 0, 38, step).slice(0, -1)} 
+        from(
+          select 
+            patients.subject_id,
+            round(cast(extract(epoch from dischtime-admittime) as numeric) / (60*60*24), 2) as hosLos,
+            round(cast(extract(epoch from outtime-intime) as numeric) / (60*60*24), 2) as icuLos 
+          from mimiciii.admissions as admissions inner join mimiciii.patients as patients 
+            on patients.subject_id=admissions.subject_id and 
+            ${age} >= ${req.query.age[0]} and ${age} <= ${req.query.age[1]} 
+            inner join mimiciii.icustays as icustays 
+            on icustays.subject_id=patients.subject_id and
+            icustays.first_careunit='${req.query.icu}'
+          where patients.gender='${req.query.gender}'
+        ) as res limit 10;
+      `
+      )
+      .then(resolve)
+      .catch(err => {
+        console.log(err)
+      })
+  })
+}
+
 app.get('/api/explore', (req, res) => {
   console.log(req.query)
   console.log(range(age1, req.query.age[0], req.query.age[1]))
@@ -173,28 +229,6 @@ app.get('/api/explore', (req, res) => {
   Promise.all([
     queryDemographic(req, 'admissions.religion'),
     queryDemographic(req, 'patients.gender'),
-    // queryDemographic(req, null, {
-    //   overrideAttr: true,
-    //   group: 'icustays.hadm_id',
-    //   attributes: [
-    //     // 'admissions.subject_id',
-    //     // 'dob',
-    //     // [Sequelize.literal(`max(admissions.admittime)`), 'admittime'],
-    //     // [Sequelize.literal(`max(patients.dob)`), 'dob'],
-    //     // 'admissions.admittime'
-    //     [
-    //       Sequelize.literal(
-    //         `count(case when ${age} > 20 and ${age} <= 100 then 1 end)`
-    //       ),
-    //       'lgt20_lt100'
-    //     ],
-    //     // [
-    //     //   Sequelize.literal(`${age}`),
-    //     //   'age'
-    //     // ]
-    //     // '*',
-    //   ],
-    // }),
     queryAge(req, 3),
     queryDemographic(req, 'admissions.ethnicity'),
     queryDemographic(req, 'admissions.marital_status'),
@@ -202,6 +236,10 @@ app.get('/api/explore', (req, res) => {
     queryDemographic(req, 'admissions.admission_location'),
     queryDemographic(req, 'admissions.insurance'),
     queryDemographic(req, 'icustays.first_careunit'),
+    queryHospitalLos(req, 5),
+    queryICULos(req, 4),
+    queryEvents(req),
+    // queryEvents(req, null, 'max', 618)
   ]).then(
     ([
       religion,
@@ -213,6 +251,10 @@ app.get('/api/explore', (req, res) => {
       admissionLocation,
       insurance,
       icutype,
+      hospitalLos,
+      icuLos,
+      heartRate,
+      // respirRate
     ]) => {
       console.log(
         religion,
@@ -223,7 +265,11 @@ app.get('/api/explore', (req, res) => {
         admissionType,
         admissionLocation,
         insurance,
-        icutype
+        icutype,
+        hospitalLos,
+        icuLos,
+        heartRate,
+        // respirRate
       )
       res
         .status(200)

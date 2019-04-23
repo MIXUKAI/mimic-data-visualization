@@ -18,21 +18,22 @@ class Chart extends React.Component {
       const { data, type } = this.props
       this.props.setModalOpen({ data, type, open: true })
     }
+    const newData = { ...data, labels: data.labels.slice(0, 10) }
 
     return data.datasets.length ? (
       <Grid.Column>
         <C
           onElementsClick={this.onElementsClick}
-          data={data}
+          data={newData}
           options={{
             title: {
               display: true,
               text: data.title,
-              position: 'left',
+              position: type === 'Bar' ? 'top' : 'left',
             },
             legend: {
               position: 'right',
-              display: false,
+              display: type !== 'Bar'
             },
           }}
         />
