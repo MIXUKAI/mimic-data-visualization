@@ -65,7 +65,7 @@ export const selectHistory = undoable((state = {}, action) => {
 
 let showSelectors = {}
 menuSelectors.forEach(s => {
-  showSelectors[s] = createSelectorWithNameData(s, { ...defaultSelector, checked: true })
+  showSelectors[s] = createSelectorWithNameData(s, { ...defaultSelector, checked: true, step: 4 })
 })
 // const showSelectors = menuSelectors.reduce(
 //   (pre, cur) => { return pre[cur] = createSelectorWithNameData(cur)},
@@ -76,7 +76,7 @@ console.log('showSelectors', showSelectors)
 export default combineReducers({
   icu: createSelectorWithNameData('icu'),
   gender: createSelectorWithNameData('gender'),
-  age: createSelectorWithNameData('age'),
+  age: createSelectorWithNameData('age', { ...defaultSelector, type: 'slider' }),
   icd9: createSelectorWithNameData('icd9'),
   searchICD: createSelectorWithNameData('searchICD'),
   ...showSelectors,

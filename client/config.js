@@ -1,6 +1,6 @@
 export const menus = {
   demographic: [
-    { name: 'show_age', title: 'Age', cname: '年龄', step: true },
+    { name: 'show_age', title: 'Age', cname: '年龄', showStep: true },
     { name: 'show_ehnicity', title: 'Ethnicity', cname: '种族' },
     { name: 'show_gender', title: 'Gender', cname: '性别' },
     { name: 'show_marital', title: 'Marital Status', cname: '婚姻状况' },

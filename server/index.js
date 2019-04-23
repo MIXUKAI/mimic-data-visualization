@@ -60,6 +60,23 @@ function queryDemographic(req, type, options = { attributes: [] }) {
       [Op.or]: req.query.gender.map(gender => ({ gender }))
     }
   }
+  let ageWhere = {}
+  if (req.query.age && req.query.age.length) {
+    ageWhere = {
+      [Op.and]: [
+        Sequelize.literal(
+          `ROUND(CAST(EXTRACT(EPOCH FROM admissions.admittime-patients.dob) AS NUMERIC) / (60*60*24*365.252), 3) >= ${
+          req.query.age[0]
+          }`
+        ),
+        Sequelize.literal(
+          `ROUND(CAST(EXTRACT(EPOCH FROM admissions.admittime-patients.dob) AS NUMERIC) / (60*60*24*365.252), 3) <= ${
+          req.query.age[1]
+          }`
+        ),
+      ],
+    }
+  }
   return new Promise((resolve, reject) => {
     Patients.findAll({
       include: [
@@ -73,20 +90,7 @@ function queryDemographic(req, type, options = { attributes: [] }) {
         {
           model: Admissions,
           attributes: [],
-          where: {
-            [Op.and]: [
-              Sequelize.literal(
-                `ROUND(CAST(EXTRACT(EPOCH FROM admissions.admittime-patients.dob) AS NUMERIC) / (60*60*24*365.252), 3) >= ${
-                req.query.age[0]
-                }`
-              ),
-              Sequelize.literal(
-                `ROUND(CAST(EXTRACT(EPOCH FROM admissions.admittime-patients.dob) AS NUMERIC) / (60*60*24*365.252), 3) <= ${
-                req.query.age[1]
-                }`
-              ),
-            ],
-          },
+          where: ageWhere,
           duplicating: false,
         },
       ],
@@ -112,12 +116,12 @@ function range(value, min = 25, max = 140, step = 15) {
   return subQuery
 }
 function queryAge(req, step) {
-  if (!req.query.age) {
+  if (req.query.show_age && req.query.show_age[0] === 'false') {
     return Promise.resolve([])
   }
   let icu = ''
   if (req.query.icu && req.query.icu.length) {
-    icu += `icustays.first_careunit='${req.query.icu[0]}' `
+    icu += ` and icustays.first_careunit='${req.query.icu[0]}' `
     for (let i = 1; i < req.query.icu.length; i++) { 
       icu += `or icustays.first_careunit='${req.query.icu[i]}' `
     }
@@ -135,7 +139,7 @@ function queryAge(req, step) {
         `
         select
           count(*),
-          ${range(age1, req.query.age[0], req.query.age[1], step).slice(0, -1)} 
+          ${range(age1, req.query.age[0], req.query.age[1], +req.query.show_age[1]).slice(0, -1)} 
         from (
           select
             patients.subject_id,
@@ -145,7 +149,7 @@ function queryAge(req, step) {
             on patients.subject_id=admissions.subject_id and 
             ${age} >= ${req.query.age[0]} and ${age} <= ${req.query.age[1]}
             inner join mimiciii.icustays as icustays 
-            on icustays.subject_id=patients.subject_id and
+            on icustays.subject_id=patients.subject_id 
             ${icu} 
             ${gender}
           group by patients.subject_id
@@ -251,7 +255,7 @@ const queryICULos = (req, step) => {
 }
 
 app.get('/api/explore', (req, res) => {
-  console.log(req.query)
+  console.log('mxkxxkxmxkx', req.query)
 
   Promise.all([
     queryDemographic(req, 'admissions.religion'),
@@ -298,13 +302,16 @@ app.get('/api/explore', (req, res) => {
         heartRate,
         // respirRate
       )
+      let ageValue = []
+      if (age[1] && age[1].rows) {
+        ageValue = age[1].rows
+      }
       res
         .status(200)
         .json({
           religion,
           gender,
-          age: age[1].rows,
-          // age: age[1].rows,
+          age: ageValue,
           ethnicity,
           marital,
           admissionType,

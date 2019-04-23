@@ -6,7 +6,7 @@ import { SET_USER_SELECT } from '../Selector/Selector.duck'
 export const SET_DEMOGRAPHIC = 'SET_DEMOGRAPHIC'
 export const SET_FETCHING = 'SET_FETCHING'
 export const SET_SEARCH_ICD = 'SET_SEARCH_ICD'
-export const explore = ({ age, icu, gender }) => async (dispatch, getState) => {
+export const explore = ({ age, icu, gender, show_age }) => async (dispatch, getState) => {
   dispatch(setFetching(true))
   const selected = getState().userSelect
   try {
@@ -15,6 +15,7 @@ export const explore = ({ age, icu, gender }) => async (dispatch, getState) => {
         age,
         icu,
         gender: gender.map(g => g === 'Male' ? 'M' : 'F'),
+        show_age: [show_age.checked, show_age.step],
       }
     })
     if (data) {

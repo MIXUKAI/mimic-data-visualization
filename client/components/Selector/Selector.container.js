@@ -50,6 +50,10 @@ class SelectorContainer extends Component {
     })
   }
 
+  handleStepChange = (e) => {
+    this.debouncedUpdate('step', e.target.value, 'step')
+  }
+
   render() {
     const { options = [] } = this.props
 
@@ -67,6 +71,7 @@ class SelectorContainer extends Component {
         onOptionChange={this.handleOptionChange}
         onSliderChange={this.handleSliderChange}
         onInputChange={this.handleInputChange}
+        onStepChange={this.handleStepChange}
       />
     )
   }

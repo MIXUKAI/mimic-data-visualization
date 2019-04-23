@@ -20,8 +20,9 @@ export default function Selector({
   sliderValue,
   input,
   icdSearched,
-  step,
+  showStep,
   showCheckBox = true,
+  onStepChange,
 }) {
   return (
     <Segment style={{ marginTop: 0, borderRadius: 0, borderRightWidth: 0 }}>
@@ -38,12 +39,12 @@ export default function Selector({
           ) : null}
           <span style={{ marginLeft: '10px' }}>{title}</span>
         </div>
-        {step ? (
+        {showStep ? (
           <>
             <Input
               list="stepList"
               placeholder="选择你需要筛选的跨度"
-              onChange={onInputChange}
+              onChange={onStepChange}
             />
             <datalist id="stepList">
               {Array(10)
