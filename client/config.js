@@ -1,22 +1,22 @@
 export const menus = {
   demographic: [
-    { name: 'age', title: 'Age' },
-    { name: 'ehnicity', title: 'Ethnicity' },
-    { name: 'gender', title: 'Gender' },
-    { name: 'marital', title: 'Marital Status', },
-    { name: 'religion', title: 'Religion' }
+    { name: 'show_age', title: 'Age', cname: '年龄', step: true },
+    { name: 'show_ehnicity', title: 'Ethnicity', cname: '种族' },
+    { name: 'show_gender', title: 'Gender', cname: '性别' },
+    { name: 'show_marital', title: 'Marital Status', cname: '婚姻状况' },
+    { name: 'show_religion', title: 'Religion', cname: '宗教信仰' },
   ],
   administrative: [
-    { name: 'icuType', title: 'Admission ICU Service Type' },
-    { name: 'admissionSource', title: 'Admission Source' },
-    { name: 'admissionType', title: 'Admission Type' },
-    { name: 'insurance', title: 'Insurance Type' }
+    { name: 'show_icuType', title: 'Admission ICU Service Type', cname: 'Admission重症监护室服务类型' },
+    { name: 'show_admissionSource', title: 'Admission Source', cname: 'Admission来源' },
+    { name: 'show_admissionType', title: 'Admission Type', cname: 'Admission类型' },
+    { name: 'show_insurance', title: 'Insurance Type', cname: '保险类型' },
   ],
   patientOutcomes: [
-    { name: '28mortality', title: '28 Day Mortality' },
-    { name: 'hospitalLenStay', title: 'Hospital Length of Stay' },
-    { name: 'hospitalMortality', title: 'Hospital Mortality' },
-    { name: 'icuMortality', title: 'ICU Mortality' },
-    { name: 'icuLenStay', title: 'ICU Length of Stay' }
-  ]
+    { name: 'show_28mortality', title: '28 Day Mortality', cname: '28天死亡率' },
+    { name: 'show_hospitalLenStay', title: 'Hospital Length of Stay', cname: '医院时长'},
+    { name: 'show_hospitalMortality', title: 'Hospital Mortality', cname: '医院死亡率' },
+    { name: 'show_icuMortality', title: 'ICU Mortality', cname: '重症监护室死亡率比' },
+    { name: 'show_icuLenStay', title: 'ICU Length of Stay', cname: '重症监护室时长' },
+  ],
 }

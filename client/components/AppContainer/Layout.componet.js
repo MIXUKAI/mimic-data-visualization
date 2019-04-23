@@ -60,7 +60,7 @@ class PushableSideBar extends Component {
 
 const mapState = state => ({
   visible: state.sidebar.isSidebarOpen,
-  userSelect: state.userSelect.selected,
+  userSelect: state.userSelect,
   isFetching: state.explore.isFetching,
 })
 

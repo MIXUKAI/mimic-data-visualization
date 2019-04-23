@@ -32,25 +32,32 @@ const VerticalSidebar = ({ visible = false, plot, searchICD, isFetching }) => (
       </Menu.Item>
       <ToggleMenuItem itemName="Selection Criteria">
         <Selector
+          showCheckBox={false}
           buttons={['CCU', 'CSRU', 'MICU', 'SICU']}
           title="First ICU Service"
           name="icu"
         />
-        <Selector buttons={['Male', 'Female']} title="Gender" name="gender" />
-        <Selector title="Age" name="age" showSlider />
+        <Selector
+          showCheckBox={false}
+          buttons={['Male', 'Female']}
+          title="Gender"
+          name="gender"
+        />
+        <Selector title="Age" name="age" showSlider showCheckBox={false} />
         <Selector title="Primary ICD9" name="icd9" options={selectOptions} />
         <Selector
           title="search ICD"
           name="searchICD"
           input
           onInputChanged={searchICD}
+          showCheckBox={false}
         />
       </ToggleMenuItem>
       {Object.keys(menus).map(groupName => {
         return (
           <ToggleMenuItem itemName={groupName} key={groupName}>
-            {menus[groupName].map(({ name, title }) => (
-              <Selector title={title} name={name} key={name} />
+            {menus[groupName].map(({ name, cname, step }) => (
+              <Selector title={cname} name={name} key={name} step={step}/>
             ))}
           </ToggleMenuItem>
         )

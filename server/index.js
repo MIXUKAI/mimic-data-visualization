@@ -21,7 +21,7 @@ const age1 = `ROUND(CAST(EXTRACT(EPOCH FROM admittime-dob) AS NUMERIC) / (60*60*
 
 const app = express()
 
-app.all('*', function(req, res, next) {
+app.all('*', function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
   res.header('Access-Control-Allow-Headers', 'X-Requested-With')
   res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
@@ -48,14 +48,24 @@ app.get('/api/overview', (req, res) => {
 const attributes = ['subject_id', 'gender', 'admissions.religion']
 
 function queryDemographic(req, type, options = { attributes: [] }) {
+  let icuWhere = {}
+  if (req.query.icu && req.query.icu.length) {
+    icuWhere = {
+      [Op.or]: req.query.icu.map(name => ({ first_careunit: name }))
+    }
+  }
+  let genderWhere = {}
+  if (req.query.gender && req.query.gender.length) {
+    genderWhere = {
+      [Op.or]: req.query.gender.map(gender => ({ gender }))
+    }
+  }
   return new Promise((resolve, reject) => {
     Patients.findAll({
       include: [
         {
           model: ICUStays,
-          where: {
-            first_careunit: req.query.icu,
-          },
+          where: icuWhere,
           required: true,
           attributes: [],
           duplicating: false,
@@ -67,12 +77,12 @@ function queryDemographic(req, type, options = { attributes: [] }) {
             [Op.and]: [
               Sequelize.literal(
                 `ROUND(CAST(EXTRACT(EPOCH FROM admissions.admittime-patients.dob) AS NUMERIC) / (60*60*24*365.252), 3) >= ${
-                  req.query.age[0]
+                req.query.age[0]
                 }`
               ),
               Sequelize.literal(
                 `ROUND(CAST(EXTRACT(EPOCH FROM admissions.admittime-patients.dob) AS NUMERIC) / (60*60*24*365.252), 3) <= ${
-                  req.query.age[1]
+                req.query.age[1]
                 }`
               ),
             ],
@@ -80,9 +90,7 @@ function queryDemographic(req, type, options = { attributes: [] }) {
           duplicating: false,
         },
       ],
-      where: {
-        gender: req.query.gender,
-      },
+      where: genderWhere,
       attributes: !options.overrideAttr
         ? [type, [sequelize.fn('count', type), 'count'], ...options.attributes]
         : options.attributes,
@@ -104,6 +112,23 @@ function range(value, min = 25, max = 140, step = 15) {
   return subQuery
 }
 function queryAge(req, step) {
+  if (!req.query.age) {
+    return Promise.resolve([])
+  }
+  let icu = ''
+  if (req.query.icu && req.query.icu.length) {
+    icu += `icustays.first_careunit='${req.query.icu[0]}' `
+    for (let i = 1; i < req.query.icu.length; i++) { 
+      icu += `or icustays.first_careunit='${req.query.icu[i]}' `
+    }
+  }
+  let gender = ' '
+  if (req.query.gender && req.query.gender.length) {
+    icu += `where patients.gender='${req.query.gender[0]}' `
+    for (let i = 1; i < req.query.icu.length; i++) { 
+      icu += `or patients.gender='${req.query.gender[i]}' `
+    }
+  }
   return new Promise(async (resolve, reject) => {
     sequelize
       .query(
@@ -121,8 +146,8 @@ function queryAge(req, step) {
             ${age} >= ${req.query.age[0]} and ${age} <= ${req.query.age[1]}
             inner join mimiciii.icustays as icustays 
             on icustays.subject_id=patients.subject_id and
-            icustays.first_careunit='${req.query.icu}'
-          where patients.gender='${req.query.gender}' 
+            ${icu} 
+            ${gender}
           group by patients.subject_id
         ) as res;
       `
@@ -135,6 +160,7 @@ function queryAge(req, step) {
 }
 
 function queryEvents(req, step, field = 'max', itemid = 211) {
+  return Promise.resolve([])
   return new Promise(async (resolve, reject) => {
     sequelize
       .query(
@@ -165,6 +191,7 @@ function queryEvents(req, step, field = 'max', itemid = 211) {
 }
 
 const queryHospitalLos = (req, step) => {
+  return Promise.resolve([])
   return new Promise(async (resolve, reject) => {
     sequelize
       .query(
@@ -194,6 +221,7 @@ const queryHospitalLos = (req, step) => {
 }
 
 const queryICULos = (req, step) => {
+  return Promise.resolve([])
   return new Promise(async (resolve, reject) => {
     sequelize
       .query(
@@ -224,7 +252,6 @@ const queryICULos = (req, step) => {
 
 app.get('/api/explore', (req, res) => {
   console.log(req.query)
-  console.log(range(age1, req.query.age[0], req.query.age[1]))
 
   Promise.all([
     queryDemographic(req, 'admissions.religion'),
@@ -254,7 +281,7 @@ app.get('/api/explore', (req, res) => {
       hospitalLos,
       icuLos,
       heartRate,
-      // respirRate
+      respirRate
     ]) => {
       console.log(
         religion,
@@ -277,6 +304,7 @@ app.get('/api/explore', (req, res) => {
           religion,
           gender,
           age: age[1].rows,
+          // age: age[1].rows,
           ethnicity,
           marital,
           admissionType,

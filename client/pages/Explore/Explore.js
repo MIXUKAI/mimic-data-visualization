@@ -52,7 +52,6 @@ class Explore extends Component {
       admissionType = [],
       admissionLocation = [],
     } = this.props.demographic
-    console.log(age)
     const ageData = { labels: [], datasets: [] }
     ageData.labels = age.length
       ? Object.keys(age[0]).filter(key => key !== 'count')

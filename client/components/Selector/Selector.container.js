@@ -24,7 +24,16 @@ class SelectorContainer extends Component {
   }
 
   handleButtonClick = e => {
-    this.updateState('buttonValue', e.target.textContent, 'button')
+    const { currentSelector } = this.props
+    const textContent = e.target.textContent
+    const newValue =  [...currentSelector.buttonValue]
+    const index = currentSelector.buttonValue.indexOf(textContent)
+    if (index === -1) {
+      newValue.push(textContent)
+    } else {
+      newValue.splice(index, 1)
+    }
+    this.updateState('buttonValue', newValue, 'button')
   }
 
   handleOptionChange = e => {
@@ -36,7 +45,7 @@ class SelectorContainer extends Component {
   }
 
   handleInputChange = e => {
-    this.debouncedUpdate('inputValue', e.target.value, 'input', (value) => {
+    this.debouncedUpdate('inputValue', e.target.value, 'input', value => {
       this.props.onInputChanged && this.props.onInputChanged(value)
     })
   }
@@ -65,7 +74,7 @@ class SelectorContainer extends Component {
 
 const mapState = (state, props) => {
   return {
-    currentSelector: state.userSelect.selected[props.name] || defaultSelector,
+    currentSelector: state.userSelect[props.name] || defaultSelector,
     icdSearched: state.explore.icdSearched,
   }
 }

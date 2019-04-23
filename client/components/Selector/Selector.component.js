@@ -20,13 +20,40 @@ export default function Selector({
   sliderValue,
   input,
   icdSearched,
+  step,
+  showCheckBox = true,
 }) {
   return (
     <Segment style={{ marginTop: 0, borderRadius: 0, borderRightWidth: 0 }}>
-      <p style={{ display: 'flex', alignItems: 'center' }}>
-        <Checkbox toggle onChange={toggleCheckbox} checked={checked} />
-        <span style={{ marginLeft: '10px' }}>{title}</span>
-        {/* {slider ? <span>{}</span>} */}
+      <p
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {showCheckBox ? (
+            <Checkbox toggle onChange={toggleCheckbox} checked={checked} />
+          ) : null}
+          <span style={{ marginLeft: '10px' }}>{title}</span>
+        </div>
+        {step ? (
+          <>
+            <Input
+              list="stepList"
+              placeholder="选择你需要筛选的跨度"
+              onChange={onInputChange}
+            />
+            <datalist id="stepList">
+              {Array(10)
+                .fill(10)
+                .map((n, index) => (
+                  <option value={index + 1} key={index} />
+                ))}
+            </datalist>
+          </>
+        ) : null}
       </p>
 
       {buttons.length ? (
@@ -34,9 +61,12 @@ export default function Selector({
           {buttons.map(btnName => (
             <Button
               key={btnName}
-              disabled={!checked}
               onClick={onButtonClick}
-              active={buttonValue === btnName}
+              active={
+                Array.isArray(buttonValue)
+                  ? buttonValue.includes(btnName)
+                  : buttonValue === btnName
+              }
             >
               {btnName}
             </Button>
@@ -46,7 +76,6 @@ export default function Selector({
 
       {showSlider ? (
         <Slider
-          disabled={!checked}
           onChange={values => {
             onSliderChange(values)
           }}
@@ -78,8 +107,8 @@ export default function Selector({
           <datalist id="datalist">
             {icdSearched.length
               ? icdSearched.map(icd => (
-                <option value={icd.short_title} key={icd.icd9_code} />
-              ))
+                  <option value={icd.short_title} key={icd.icd9_code} />
+                ))
               : []}
             {/* <option value='English' />
             <option value='Chinese' />
