@@ -4,6 +4,7 @@ import { Sidebar } from 'semantic-ui-react'
 
 import Navigator from '../Navigator/Navigator.component'
 import VerticalSidebar from '../SideBar/SideBar.component'
+import { toggleSidebar } from '../SideBar/SideBar.duck'
 import { explore, searchICD } from './AppContainer.duck'
 
 class PushableSideBar extends Component {
@@ -17,7 +18,7 @@ class PushableSideBar extends Component {
         return item.sliderValue
       case 'input':
         return item.inputValue
-      case 'step': 
+      case 'step':
         return item.step
       default:
         return item.checked
@@ -42,7 +43,7 @@ class PushableSideBar extends Component {
   }
 
   render() {
-    const { visible, children, searchICD, icdSearched, isFetching } = this.props
+    const { visible, children, toggleSidebar, searchICD, icdSearched, isFetching } = this.props
     return (
       <Sidebar.Pushable className="sidebar-container">
         <VerticalSidebar
@@ -51,6 +52,7 @@ class PushableSideBar extends Component {
           plot={this.plot}
           searchICD={searchICD}
           isFetching={isFetching}
+          toggleSidebar={toggleSidebar}
         />
         <Sidebar.Pusher>
           <Navigator />
@@ -69,5 +71,5 @@ const mapState = state => ({
 
 export default connect(
   mapState,
-  { explore, searchICD }
+  { explore, searchICD, toggleSidebar }
 )(PushableSideBar)

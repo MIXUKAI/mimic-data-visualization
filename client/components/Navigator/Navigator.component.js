@@ -45,7 +45,6 @@ class Navigator extends Component {
               {[
                 { view: 'Home', route: '/' },
                 { view: 'Explore', route: '/explore' },
-                { view: 'Compare', route: '/compare' },
               ].map(({ view, route }) => (
                 <Menu.Item
                   key={view}
@@ -63,7 +62,7 @@ class Navigator extends Component {
                   onClick={this.props.undo}
                   disabled={!this.props.demoGraphicHistory.past.length}
                 >
-                  撤销
+                  UNDO撤销
                 </Button>
                 <Button
                   style={{ marginLeft: '0.5em' }}
@@ -71,7 +70,7 @@ class Navigator extends Component {
                   onClick={this.props.redo}
                   disabled={!this.props.demoGraphicHistory.future.length}
                 >
-                  返回
+                  REDO返回
                 </Button>
               </Menu.Item>
             </Container>

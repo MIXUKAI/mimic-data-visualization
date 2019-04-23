@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react'
+import { Sidebar, Menu, Icon, Button, Header } from 'semantic-ui-react'
 
 import Selector from '../Selector/Selector.container'
 import ToggleMenuItem from './ToggleMenuItem.component'
@@ -16,16 +16,30 @@ const selectOptions = [
   'Sensory Organ Diseaes',
 ]
 
-const VerticalSidebar = ({ visible = false, plot, searchICD, isFetching }) => (
+const VerticalSidebar = ({
+  visible = false,
+  plot,
+  searchICD,
+  isFetching,
+  toggleSidebar,
+}) => (
   <Sidebar
-    animation="push"
+    animation="overlay"
     direction="left"
     icon="labeled"
     vertical
     visible={visible}
     width="wide"
+    style={{ backgroundColor: 'rgba(255,255,255,.8)'}}
   >
     <Menu vertical style={{ width: '100%', borderRadius: 0 }}>
+      <Button
+        onClick={toggleSidebar}
+        style={{ width: '100%', borderRadius: 0 }}
+      >
+        <Icon name="backward"/>
+        收起来
+      </Button>
       <Menu.Item as="a">
         <Icon name="home" />
         Instructions
@@ -57,14 +71,19 @@ const VerticalSidebar = ({ visible = false, plot, searchICD, isFetching }) => (
         return (
           <ToggleMenuItem itemName={groupName} key={groupName}>
             {menus[groupName].map(({ name, cname, showStep }) => (
-              <Selector title={cname} name={name} key={name} showStep={showStep}/>
+              <Selector
+                title={cname}
+                name={name}
+                key={name}
+                showStep={showStep}
+              />
             ))}
           </ToggleMenuItem>
         )
       })}
     </Menu>
     <Button
-      style={{ width: '98%', padding: '1em 0' }}
+      style={{ width: '100%', padding: '1em 0' }}
       onClick={plot}
       primary
       loading={isFetching}
