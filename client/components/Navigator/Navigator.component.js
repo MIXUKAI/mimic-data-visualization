@@ -11,6 +11,7 @@ import {
 import { Link } from 'react-router-dom'
 
 import { toggleSidebar } from '../SideBar/SideBar.duck'
+import { redo, undo } from '../../components/AppContainer/AppContainer.duck'
 class Navigator extends Component {
   render() {
     const { fixed = false, currentView, toggleSidebar } = this.props
@@ -57,16 +58,20 @@ class Navigator extends Component {
               ))}
               <Menu.Item as="a">Document</Menu.Item>
               <Menu.Item position="right">
-                <Button as="a" inverted={!fixed}>
-                  Log in
+                <Button
+                  primary
+                  onClick={this.props.undo}
+                  disabled={!this.props.demoGraphicHistory.past.length}
+                >
+                  撤销
                 </Button>
                 <Button
-                  as="a"
-                  inverted={!fixed}
-                  primary={fixed}
                   style={{ marginLeft: '0.5em' }}
+                  primary
+                  onClick={this.props.redo}
+                  disabled={!this.props.demoGraphicHistory.future.length}
                 >
-                  Sign Up
+                  返回
                 </Button>
               </Menu.Item>
             </Container>
@@ -79,9 +84,10 @@ class Navigator extends Component {
 
 const mapState = state => ({
   currentView: state.navigator.currentView,
+  demoGraphicHistory: state.explore.demographic,
 })
 
 export default connect(
   mapState,
-  { toggleSidebar }
+  { toggleSidebar, undo, redo }
 )(Navigator)
