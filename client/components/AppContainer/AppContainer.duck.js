@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import Api from '../../util/fetch'
+import undoable from '../../util/undo'
 
 export const SET_DEMOGRAPHIC = 'SET_DEMOGRAPHIC'
 export const SET_SEARCH_ICD = 'SET_SEARCH_ICD'
@@ -41,7 +42,15 @@ const icdSearched = (state = [], { type, payload }) => {
   return type === SET_SEARCH_ICD ? payload : state
 }
 
+export const undo = () => dispatch => {
+  dispatch({ type: 'UNDO' }) 
+}
+
+export const redo = () => dispatch => {
+  dispatch({ type: 'REDO' })
+}
+
 export default combineReducers({
-  demographic,
+  demographic: undoable(demographic),
   icdSearched
 })

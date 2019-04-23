@@ -15,6 +15,7 @@ import withCurrentView from '../../hoc/withCurrentView'
 import { getColors } from '../../util/colors'
 import Modal from '../../components/Modal/Modal.component'
 import MyChart from '../../components/Chart/Chart'
+import { redo, undo } from '../../components/AppContainer/AppContainer.duck'
 import { setModalOpen } from '../../components/Chart/Chart.duck'
 import './Explore.css'
 
@@ -38,7 +39,7 @@ class Explore extends Component {
   }
 
   render() {
-    console.log(this.props.demographic)
+    console.log(this.props.demoGraphicHistory)
     const { modal } = this.props
     const {
       religion,
@@ -87,8 +88,23 @@ class Explore extends Component {
       ModalChart = Bar
     }
 
+    console.log(this.props.demo)
     return (
       <div style={{ padding: '0 80px' }}>
+        <Button
+          primary
+          onClick={this.props.undo}
+          disabled={!this.props.demoGraphicHistory.past.length}
+        >
+          UNDO
+        </Button>
+        <Button
+          primary
+          onClick={this.props.redo}
+          disabled={!this.props.demoGraphicHistory.future.length}
+        >
+          REDO
+        </Button>
         <Modal
           isOpen={modal.open}
           // onAfterOpen={this.afterOpenModal}
@@ -144,11 +160,12 @@ class Explore extends Component {
 }
 
 const mapState = state => ({
-  demographic: state.explore.demographic,
+  demographic: state.explore.demographic.present,
+  demoGraphicHistory: state.explore.demographic,
   modal: state.chart.modal,
 })
 
 export default connect(
   mapState,
-  { setModalOpen }
+  { setModalOpen, undo, redo }
 )(withCurrentView(Explore))
