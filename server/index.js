@@ -14,6 +14,7 @@ const {
   queryPespiratoryRate,
   queyrTemperature,
 } = require('./controller/vital_sign')
+const { queryHeightCm, queryWeightKg } = require('./controller/miscellaneous')
 
 Patients.hasMany(Admissions, { foreignKey: 'subject_id' })
 Patients.hasMany(ICUStays, { foreignKey: 'subject_id' })
@@ -280,6 +281,8 @@ app.get('/api/explore', (req, res) => {
     queyrTemperature(req, { min: 80, max: 104, step: 2 }),
     queyrArtericalBloodPressure(req, { min: 44, max: 190, step: 15 }),
     queryPespiratoryRate(req, { min: 0, max: 36, step: 4 }),
+    queryHeightCm(req, { min: 136, max: 210, step: 5 }),
+    queryWeightKg(req, { min: 21, max: 140, step: 10 })
     // queryEvents(req, null, 'max', 618)
   ]).then(
     ([
@@ -298,6 +301,8 @@ app.get('/api/explore', (req, res) => {
       temperature,
       bloodPressure,
       pespiratoryRate,
+      height,
+      weight,
     ]) => {
       console.log(
         religion,
@@ -314,7 +319,9 @@ app.get('/api/explore', (req, res) => {
         heartRate,
         temperature,
         bloodPressure,
-        pespiratoryRate
+        pespiratoryRate,
+        height,
+        weight
       )
       let ageValue = []
       if (age[1] && age[1].rows) {
@@ -344,6 +351,8 @@ app.get('/api/explore', (req, res) => {
         temperature,
         bloodPressure,
         pespiratoryRate,
+        height,
+        weight,
       })
     }
   )

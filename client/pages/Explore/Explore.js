@@ -55,8 +55,8 @@ class Explore extends Component {
       result.datasets.push({
         data: sourceData.length
           ? Object.keys(sourceData[0])
-              .filter(k => k !== 'count')
-              .map(k => sourceData[0][k])
+            .filter(k => k !== 'count')
+            .map(k => sourceData[0][k])
           : [],
         backgroundColor: getColors(
           sourceData.length
@@ -86,6 +86,8 @@ class Explore extends Component {
       temperature = [],
       bloodPressure = [],
       pespiratoryRate = [],
+      height = [],
+      weight = [],
     } = this.props.demographic
     const demographic = []
     this.handleBarData(age, '年龄分布', demographic)
@@ -134,6 +136,9 @@ class Explore extends Component {
     this.handleBarData(temperature, '体温', vitalSigns)
     this.handleBarData(bloodPressure, '血压', vitalSigns)
     this.handleBarData(pespiratoryRate, '呼吸频率', vitalSigns)
+    const miscellaneous = []
+    this.handleBarData(height, '身高(cm)', miscellaneous)
+    this.handleBarData(weight, '体重(kg)', miscellaneous)
 
     let ModalChart = Pie
     if (modal.type === 'Bar') {
@@ -200,6 +205,14 @@ class Explore extends Component {
               icon: 'heartbeat',
             }}
             data={vitalSigns}
+          />
+          <Group
+            title={{
+              ctitle: '杂',
+              etitle: 'Miscellaneous',
+              icon: 'medkit',
+            }}
+            data={miscellaneous}
           />
         </Grid>
       </div>

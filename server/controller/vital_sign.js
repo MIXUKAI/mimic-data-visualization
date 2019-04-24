@@ -58,6 +58,7 @@ const queyrTemperature = queryEvents(223761)
 const queryPespiratoryRate = queryEvents(224690)
 
 module.exports = {
+  queryEvents,
   queyrArtericalBloodPressure,
   queryHeartRate,
   queyrTemperature,

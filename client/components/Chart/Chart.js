@@ -18,7 +18,7 @@ class Chart extends React.Component {
       const { data, type } = this.props
       this.props.setModalOpen({ data, type, open: true })
     }
-    const newData = {
+    const newData = type !== 'Bar' ? {
       ...data,
       labels: data.labels
         .filter(l => !!l)
@@ -29,7 +29,7 @@ class Chart extends React.Component {
           }
           return l
         }),
-    }
+    } : data
 
     return data.datasets.length ? (
       <Grid.Column>
