@@ -1,20 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {
-  Header,
-  Image,
-  Segment,
-  Grid,
-  Container,
-  Button,
-  Icon,
-} from 'semantic-ui-react'
+import { Responsive, Grid } from 'semantic-ui-react'
 import { Pie, Bar } from 'react-chartjs-2'
 
 import withCurrentView from '../../hoc/withCurrentView'
 import { getColors } from '../../util/colors'
 import Modal from '../../components/Modal/Modal.component'
-import MyChart from '../../components/Chart/Chart'
 import { setModalOpen } from '../../components/Chart/Chart.duck'
 import Group from './Group'
 import Instruction from './Instrction'
@@ -78,32 +69,17 @@ class Explore extends Component {
       ageData.datasets.push({
         data: age.length
           ? Object.keys(age[0])
-              .filter(k => k !== 'count')
-              .map(k => age[0][k])
+            .filter(k => k !== 'count')
+            .map(k => age[0][k])
           : [],
         backgroundColor: getColors(
           age.length ? Object.keys(age[0]).filter(k => k !== 'count').length : 0
         ),
       })
     age.length && demographic.push(ageData)
-    this.formatDemographicData(
-      religion,
-      'religion',
-      '宗教信仰',
-      demographic
-    )
-    this.formatDemographicData(
-      gender,
-      'gender',
-      '性别分布',
-      demographic
-    )
-    this.formatDemographicData(
-      ethnicity,
-      'ethnicity',
-      '种族分布',
-      demographic
-    )
+    this.formatDemographicData(religion, 'religion', '宗教信仰', demographic)
+    this.formatDemographicData(gender, 'gender', '性别分布', demographic)
+    this.formatDemographicData(ethnicity, 'ethnicity', '种族分布', demographic)
     this.formatDemographicData(
       marital,
       'marital_status',
@@ -112,26 +88,26 @@ class Explore extends Component {
     )
 
     const administrative = []
-    const icutypeData = this.formatDemographicData(
+    this.formatDemographicData(
       icutype,
       'first_careunit',
       '重症监护室类型',
       administrative,
       'Bar'
     )
-    const adLocationData = this.formatDemographicData(
+    this.formatDemographicData(
       admissionLocation,
       'admission_location',
       '入住地点',
-      administrative,
+      administrative
     )
-    const adTypeData = this.formatDemographicData(
+    this.formatDemographicData(
       admissionType,
       'admission_type',
       '入住类型',
-      administrative,
+      administrative
     )
-    const insuranceData = this.formatDemographicData(
+    this.formatDemographicData(
       insurance,
       'insurance',
       '保险类型',
@@ -143,13 +119,11 @@ class Explore extends Component {
       ModalChart = Bar
     }
 
-    console.log(this.props.demo)
     return (
       <div style={{ padding: '0 80px' }}>
         <Instruction />
         <Modal
           isOpen={modal.open}
-          // onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
           contentLabel="Example Modal"
           className="Modal"
@@ -186,7 +160,7 @@ class Explore extends Component {
             title={{
               ctitle: '行政管理信息',
               etitle: 'Administrative Information',
-              icon: 'ambulance'
+              icon: 'ambulance',
             }}
             data={administrative}
           />
