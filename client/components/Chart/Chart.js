@@ -18,7 +18,18 @@ class Chart extends React.Component {
       const { data, type } = this.props
       this.props.setModalOpen({ data, type, open: true })
     }
-    const newData = { ...data, labels: data.labels.slice(0, 10) }
+    const newData = {
+      ...data,
+      labels: data.labels
+        .filter(l => !!l)
+        .slice(0, 10)
+        .map(l => {
+          if (l.length > 10) {
+            return l.slice(0, 10) + '...'
+          }
+          return l
+        }),
+    }
 
     return data.datasets.length ? (
       <Grid.Column>
@@ -29,11 +40,14 @@ class Chart extends React.Component {
             title: {
               display: true,
               text: data.title,
+              fontSize: 15,
+              lineHeight: 2,
+              fontColor: '#1678c2',
               position: type === 'Bar' ? 'top' : 'left',
             },
             legend: {
               position: 'right',
-              display: type !== 'Bar'
+              display: type !== 'Bar',
             },
           }}
         />

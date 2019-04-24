@@ -25,10 +25,14 @@ class Explore extends Component {
     visible: true,
   }
 
-  formatDemographicData = (source = [], type) => {
-    const result = { labels: [], datasets: [] }
+  formatDemographicData = (source = [], type, title) => {
+    const result = { labels: [], datasets: [], title }
+    source.sort((a, b) => b.count - a.count)
+    const count = source.reduce((prev, curr) => prev + +curr.count, 0)
     if (source.length) {
-      result.labels = source.map(pa => pa[type])
+      result.labels = source.map(
+        pa => `${((pa.count / count) * 100).toFixed(2)}% ${pa[type]}`
+      )
       result.datasets.push({
         data: source.map(pa => pa.count),
         backgroundColor: getColors(source.length),
@@ -66,20 +70,42 @@ class Explore extends Component {
       ),
     })
     console.log(ageData)
-    const religionData = this.formatDemographicData(religion, 'religion')
-    const genderData = this.formatDemographicData(gender, 'gender')
-    const ethnicityData = this.formatDemographicData(ethnicity, 'ethnicity')
-    const maritalData = this.formatDemographicData(marital, 'marital_status')
-    const icutypeData = this.formatDemographicData(icutype, 'first_careunit')
+    const religionData = this.formatDemographicData(
+      religion,
+      'religion',
+      '宗教信仰'
+    )
+    const genderData = this.formatDemographicData(gender, 'gender', '性别分布')
+    const ethnicityData = this.formatDemographicData(
+      ethnicity,
+      'ethnicity',
+      '种族分布'
+    )
+    const maritalData = this.formatDemographicData(
+      marital,
+      'marital_status',
+      '婚姻状况'
+    )
+    const icutypeData = this.formatDemographicData(
+      icutype,
+      'first_careunit',
+      '重症监护室类型'
+    )
     const adLocationData = this.formatDemographicData(
       admissionLocation,
-      'admission_location'
+      'admission_location',
+      '入住地点'
     )
     const adTypeData = this.formatDemographicData(
       admissionType,
-      'admission_type'
+      'admission_type',
+      '入住类型'
     )
-    const insuranceData = this.formatDemographicData(insurance, 'insurance')
+    const insuranceData = this.formatDemographicData(
+      insurance,
+      'insurance',
+      '保险类型'
+    )
 
     let ModalChart = Pie
     if (modal.type === 'Bar') {

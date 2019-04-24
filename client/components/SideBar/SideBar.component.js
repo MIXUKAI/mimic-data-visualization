@@ -24,7 +24,7 @@ const VerticalSidebar = ({
   toggleSidebar,
 }) => (
   <Sidebar
-    animation="overlay"
+    animation="push"
     direction="left"
     icon="labeled"
     vertical
