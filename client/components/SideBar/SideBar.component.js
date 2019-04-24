@@ -40,10 +40,6 @@ const VerticalSidebar = ({
         <Icon name="backward"/>
         收起来
       </Button>
-      <Menu.Item as="a">
-        <Icon name="home" />
-        Instructions
-      </Menu.Item>
       <ToggleMenuItem itemName="Selection Criteria">
         <Selector
           showCheckBox={false}

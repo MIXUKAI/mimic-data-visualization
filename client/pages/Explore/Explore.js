@@ -16,6 +16,8 @@ import { getColors } from '../../util/colors'
 import Modal from '../../components/Modal/Modal.component'
 import MyChart from '../../components/Chart/Chart'
 import { setModalOpen } from '../../components/Chart/Chart.duck'
+import Group from './Group'
+import Instruction from './Instrction'
 import './Explore.css'
 
 class Explore extends Component {
@@ -25,8 +27,14 @@ class Explore extends Component {
     visible: true,
   }
 
-  formatDemographicData = (source = [], type, title) => {
-    const result = { labels: [], datasets: [], title }
+  formatDemographicData = (
+    source = [],
+    type,
+    title,
+    group,
+    chartType = 'Pie'
+  ) => {
+    const result = { labels: [], datasets: [], title, chartType }
     source.sort((a, b) => b.count - a.count)
     const count = source.reduce((prev, curr) => prev + +curr.count, 0)
     if (source.length) {
@@ -37,6 +45,7 @@ class Explore extends Component {
         data: source.map(pa => pa.count),
         backgroundColor: getColors(source.length),
       })
+      group && group.push(result)
     }
     return result
   }
@@ -55,56 +64,78 @@ class Explore extends Component {
       admissionType = [],
       admissionLocation = [],
     } = this.props.demographic
-    const ageData = { labels: [], datasets: [] }
+    const demographic = []
+    const ageData = {
+      labels: [],
+      datasets: [],
+      title: '年龄分布',
+      chartType: 'Bar',
+    }
     ageData.labels = age.length
       ? Object.keys(age[0]).filter(key => key !== 'count')
       : []
-    ageData.datasets.push({
-      data: age.length
-        ? Object.keys(age[0])
-            .filter(k => k !== 'count')
-            .map(k => age[0][k])
-        : [],
-      backgroundColor: getColors(
-        age.length ? Object.keys(age[0]).filter(k => k !== 'count').length : 0
-      ),
-    })
-    console.log(ageData)
-    const religionData = this.formatDemographicData(
+    age.length &&
+      ageData.datasets.push({
+        data: age.length
+          ? Object.keys(age[0])
+              .filter(k => k !== 'count')
+              .map(k => age[0][k])
+          : [],
+        backgroundColor: getColors(
+          age.length ? Object.keys(age[0]).filter(k => k !== 'count').length : 0
+        ),
+      })
+    age.length && demographic.push(ageData)
+    this.formatDemographicData(
       religion,
       'religion',
-      '宗教信仰'
+      '宗教信仰',
+      demographic
     )
-    const genderData = this.formatDemographicData(gender, 'gender', '性别分布')
-    const ethnicityData = this.formatDemographicData(
+    this.formatDemographicData(
+      gender,
+      'gender',
+      '性别分布',
+      demographic
+    )
+    this.formatDemographicData(
       ethnicity,
       'ethnicity',
-      '种族分布'
+      '种族分布',
+      demographic
     )
-    const maritalData = this.formatDemographicData(
+    this.formatDemographicData(
       marital,
       'marital_status',
-      '婚姻状况'
+      '婚姻状况',
+      demographic
     )
+
+    const administrative = []
     const icutypeData = this.formatDemographicData(
       icutype,
       'first_careunit',
-      '重症监护室类型'
+      '重症监护室类型',
+      administrative,
+      'Bar'
     )
     const adLocationData = this.formatDemographicData(
       admissionLocation,
       'admission_location',
-      '入住地点'
+      '入住地点',
+      administrative,
     )
     const adTypeData = this.formatDemographicData(
       admissionType,
       'admission_type',
-      '入住类型'
+      '入住类型',
+      administrative,
     )
     const insuranceData = this.formatDemographicData(
       insurance,
       'insurance',
-      '保险类型'
+      '保险类型',
+      administrative
     )
 
     let ModalChart = Pie
@@ -115,6 +146,7 @@ class Explore extends Component {
     console.log(this.props.demo)
     return (
       <div style={{ padding: '0 80px' }}>
+        <Instruction />
         <Modal
           isOpen={modal.open}
           // onAfterOpen={this.afterOpenModal}
@@ -142,27 +174,22 @@ class Explore extends Component {
         </Modal>
 
         <Grid style={{ margin: '50px 0' }}>
-          <Header as="h2">
-            <Icon name="users" />
-            <Header.Content>
-              Demographic Information
-              <Header.Subheader>人口统计信息</Header.Subheader>
-            </Header.Content>
-          </Header>
-          <Grid.Row columns={3}>
-            <MyChart onElementsClick={this.openModal} data={religionData} />
-            <MyChart data={genderData} />
-            <MyChart data={ethnicityData} />
-            <MyChart data={maritalData} />
-            <MyChart data={ageData} type="Bar" />
-          </Grid.Row>
-          <Header size="medium">Administrative Information</Header>
-          <Grid.Row columns={3}>
-            <MyChart data={insuranceData} />
-            <MyChart data={adLocationData} />
-            <MyChart data={adTypeData} />
-            <MyChart data={icutypeData} type="Bar" />
-          </Grid.Row>
+          <Group
+            title={{
+              ctitle: '人口统计信息',
+              etitle: 'Demographic Information',
+              icon: 'users',
+            }}
+            data={demographic}
+          />
+          <Group
+            title={{
+              ctitle: '行政管理信息',
+              etitle: 'Administrative Information',
+              icon: 'ambulance'
+            }}
+            data={administrative}
+          />
         </Grid>
       </div>
     )
