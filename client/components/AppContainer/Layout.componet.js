@@ -27,18 +27,16 @@ class PushableSideBar extends Component {
 
   plot = () => {
     const { userSelect } = this.props
-    const { icu, icd9, age, gender, icdCode, show_age } = userSelect
+    const { icu, age, gender, show_age } = userSelect
     const icuValue = this.getValue(icu)
     const ageValue = this.getValue(age)
     const genderValue = this.getValue(gender)
-    // const icdCodeValue = this.getValue(icdCode)
     console.log(icuValue, ageValue, genderValue)
     this.props.explore({
       age: ageValue,
       gender: genderValue,
       icu: icuValue,
       show_age,
-      // icdCode: icdCodeValue,
     })
   }
 

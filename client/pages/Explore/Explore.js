@@ -41,6 +41,32 @@ class Explore extends Component {
     return result
   }
 
+  handleBarData = (sourceData, title, group) => {
+    const result = {
+      labels: [],
+      datasets: [],
+      title,
+      chartType: 'Bar',
+    }
+    result.labels = sourceData.length
+      ? Object.keys(sourceData[0]).filter(key => key !== 'count')
+      : []
+    sourceData.length &&
+      result.datasets.push({
+        data: sourceData.length
+          ? Object.keys(sourceData[0])
+              .filter(k => k !== 'count')
+              .map(k => sourceData[0][k])
+          : [],
+        backgroundColor: getColors(
+          sourceData.length
+            ? Object.keys(sourceData[0]).filter(k => k !== 'count').length
+            : 0
+        ),
+      })
+    sourceData.length && group.push(result)
+  }
+
   render() {
     console.log(this.props.demoGraphicHistory)
     const { modal } = this.props
@@ -54,29 +80,15 @@ class Explore extends Component {
       insurance = [],
       admissionType = [],
       admissionLocation = [],
+      hospitalLos = [],
+      icuLos = [],
+      heartRate = [],
+      temperature = [],
+      bloodPressure = [],
+      pespiratoryRate = [],
     } = this.props.demographic
     const demographic = []
-    const ageData = {
-      labels: [],
-      datasets: [],
-      title: '年龄分布',
-      chartType: 'Bar',
-    }
-    ageData.labels = age.length
-      ? Object.keys(age[0]).filter(key => key !== 'count')
-      : []
-    age.length &&
-      ageData.datasets.push({
-        data: age.length
-          ? Object.keys(age[0])
-            .filter(k => k !== 'count')
-            .map(k => age[0][k])
-          : [],
-        backgroundColor: getColors(
-          age.length ? Object.keys(age[0]).filter(k => k !== 'count').length : 0
-        ),
-      })
-    age.length && demographic.push(ageData)
+    this.handleBarData(age, '年龄分布', demographic)
     this.formatDemographicData(religion, 'religion', '宗教信仰', demographic)
     this.formatDemographicData(gender, 'gender', '性别分布', demographic)
     this.formatDemographicData(ethnicity, 'ethnicity', '种族分布', demographic)
@@ -113,6 +125,15 @@ class Explore extends Component {
       '保险类型',
       administrative
     )
+
+    const patientOutcomes = []
+    this.handleBarData(hospitalLos, '患者医院所呆时长', patientOutcomes)
+    this.handleBarData(icuLos, '患者重症监护室所呆时长', patientOutcomes)
+    const vitalSigns = []
+    this.handleBarData(heartRate, '心率', vitalSigns)
+    this.handleBarData(temperature, '体温', vitalSigns)
+    this.handleBarData(bloodPressure, '血压', vitalSigns)
+    this.handleBarData(pespiratoryRate, '呼吸频率', vitalSigns)
 
     let ModalChart = Pie
     if (modal.type === 'Bar') {
@@ -163,6 +184,22 @@ class Explore extends Component {
               icon: 'ambulance',
             }}
             data={administrative}
+          />
+          <Group
+            title={{
+              ctitle: '病人出入',
+              etitle: 'Patient Outcomes',
+              icon: 'hospital outline',
+            }}
+            data={patientOutcomes}
+          />
+          <Group
+            title={{
+              ctitle: '生命体征',
+              etitle: 'Vital Signs',
+              icon: 'heartbeat',
+            }}
+            data={vitalSigns}
           />
         </Grid>
       </div>
