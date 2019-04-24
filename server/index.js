@@ -8,6 +8,13 @@ const Patients = require('./models/patients')(sequelize, Sequelize)
 const ICUStays = require('./models/icustays')(sequelize, Sequelize)
 const DICD = require('./models/d_icd_diagnoses')(sequelize, Sequelize)
 
+const {
+  queyrArtericalBloodPressure,
+  queryHeartRate,
+  queryPespiratoryRate,
+  queyrTemperature,
+} = require('./controller/vital_sign')
+
 Patients.hasMany(Admissions, { foreignKey: 'subject_id' })
 Patients.hasMany(ICUStays, { foreignKey: 'subject_id' })
 Admissions.belongsTo(Patients, {
@@ -51,13 +58,13 @@ function queryDemographic(req, type, options = { attributes: [] }) {
   let icuWhere = {}
   if (req.query.icu && req.query.icu.length) {
     icuWhere = {
-      [Op.or]: req.query.icu.map(name => ({ first_careunit: name }))
+      [Op.or]: req.query.icu.map(name => ({ first_careunit: name })),
     }
   }
   let genderWhere = {}
   if (req.query.gender && req.query.gender.length) {
     genderWhere = {
-      [Op.or]: req.query.gender.map(gender => ({ gender }))
+      [Op.or]: req.query.gender.map(gender => ({ gender })),
     }
   }
   let ageWhere = {}
@@ -122,14 +129,14 @@ function queryAge(req, step) {
   let icu = ''
   if (req.query.icu && req.query.icu.length) {
     icu += ` and icustays.first_careunit='${req.query.icu[0]}' `
-    for (let i = 1; i < req.query.icu.length; i++) { 
+    for (let i = 1; i < req.query.icu.length; i++) {
       icu += `or icustays.first_careunit='${req.query.icu[i]}' `
     }
   }
   let gender = ' '
   if (req.query.gender && req.query.gender.length) {
     icu += `where patients.gender='${req.query.gender[0]}' `
-    for (let i = 1; i < req.query.icu.length; i++) { 
+    for (let i = 1; i < req.query.icu.length; i++) {
       icu += `or patients.gender='${req.query.gender[i]}' `
     }
   }
@@ -139,7 +146,12 @@ function queryAge(req, step) {
         `
         select
           count(*),
-          ${range(age1, req.query.age[0], req.query.age[1], +req.query.show_age[1]).slice(0, -1)} 
+          ${range(
+          age1,
+          req.query.age[0],
+          req.query.age[1],
+          +req.query.show_age[1]
+        ).slice(0, -1)} 
         from (
           select
             patients.subject_id,
@@ -163,39 +175,21 @@ function queryAge(req, step) {
   })
 }
 
-function queryEvents(req, step, field = 'max', itemid = 211) {
-  return Promise.resolve([])
-  return new Promise(async (resolve, reject) => {
-    sequelize
-      .query(
-        `
-    select
-      count(*),
-      ${range('valuenum').slice(0, -1)} 
-    from (
-      select 
-        icustays.subject_id,
-        ${field}(valuenum) as valuenum
-      from mimiciii.icustays as icustays inner join mimiciii.patients as patients  
-      on patients.subject_id=icustays.subject_id 
-      and patients.gender=:gender 
-      inner join mimiciii.chartevents_3 as chartevents_3 on icustays.subject_id=chartevents_3.subject_id 
-      and chartevents_3.itemid=${itemid} 
-      where icustays.first_careunit=:icu 
-      group by icustays.subject_id
-    ) as res;
-    `,
-        {
-          raw: true,
-          replacements: { gender: req.query.gender, icu: req.query.icu },
-        }
-      )
-      .then(resolve)
-  })
-}
-
 const queryHospitalLos = (req, step) => {
-  return Promise.resolve([])
+  let icu = ''
+  if (req.query.icu && req.query.icu.length) {
+    icu += ` and icustays.first_careunit='${req.query.icu[0]}' `
+    for (let i = 1; i < req.query.icu.length; i++) {
+      icu += `or icustays.first_careunit='${req.query.icu[i]}' `
+    }
+  }
+  let gender = ' '
+  if (req.query.gender && req.query.gender.length) {
+    icu += `where patients.gender='${req.query.gender[0]}' `
+    for (let i = 1; i < req.query.icu.length; i++) {
+      icu += `or patients.gender='${req.query.gender[i]}' `
+    }
+  }
   return new Promise(async (resolve, reject) => {
     sequelize
       .query(
@@ -211,21 +205,34 @@ const queryHospitalLos = (req, step) => {
             on patients.subject_id=admissions.subject_id and 
             ${age} >= ${req.query.age[0]} and ${age} <= ${req.query.age[1]} 
             inner join mimiciii.icustays as icustays 
-            on icustays.subject_id=patients.subject_id and
-            icustays.first_careunit='${req.query.icu}'
-          where patients.gender='${req.query.gender}'
+            on icustays.subject_id=patients.subject_id
+            ${icu}
+          ${gender}
         ) as res limit 10;
       `
       )
       .then(resolve)
-      .catch(err => {
-        console.log(err)
-      })
   })
 }
 
 const queryICULos = (req, step) => {
-  return Promise.resolve([])
+  // if (req.query.show_age && req.query.show_age[0] === 'false') {
+  //   return Promise.resolve([])
+  // }
+  let icu = ''
+  if (req.query.icu && req.query.icu.length) {
+    icu += ` and icustays.first_careunit='${req.query.icu[0]}' `
+    for (let i = 1; i < req.query.icu.length; i++) {
+      icu += `or icustays.first_careunit='${req.query.icu[i]}' `
+    }
+  }
+  let gender = ' '
+  if (req.query.gender && req.query.gender.length) {
+    icu += `where patients.gender='${req.query.gender[0]}' `
+    for (let i = 1; i < req.query.icu.length; i++) {
+      icu += `or patients.gender='${req.query.gender[i]}' `
+    }
+  }
   return new Promise(async (resolve, reject) => {
     sequelize
       .query(
@@ -241,9 +248,9 @@ const queryICULos = (req, step) => {
             on patients.subject_id=admissions.subject_id and 
             ${age} >= ${req.query.age[0]} and ${age} <= ${req.query.age[1]} 
             inner join mimiciii.icustays as icustays 
-            on icustays.subject_id=patients.subject_id and
-            icustays.first_careunit='${req.query.icu}'
-          where patients.gender='${req.query.gender}'
+            on icustays.subject_id=patients.subject_id 
+            ${icu}
+          ${gender}
         ) as res limit 10;
       `
       )
@@ -269,7 +276,10 @@ app.get('/api/explore', (req, res) => {
     queryDemographic(req, 'icustays.first_careunit'),
     queryHospitalLos(req, 5),
     queryICULos(req, 4),
-    queryEvents(req),
+    queryHeartRate(req, { min: 28, max: 140, step: 12 }),
+    queyrTemperature(req, { min: 80, max: 104, step: 2 }),
+    queyrArtericalBloodPressure(req, { min: 44, max: 190, step: 15 }),
+    queryPespiratoryRate(req, { min: 0, max: 36, step: 4 }),
     // queryEvents(req, null, 'max', 618)
   ]).then(
     ([
@@ -285,7 +295,9 @@ app.get('/api/explore', (req, res) => {
       hospitalLos,
       icuLos,
       heartRate,
-      respirRate
+      temperature,
+      bloodPressure,
+      pespiratoryRate,
     ]) => {
       console.log(
         religion,
@@ -300,25 +312,39 @@ app.get('/api/explore', (req, res) => {
         hospitalLos,
         icuLos,
         heartRate,
-        // respirRate
+        temperature,
+        bloodPressure,
+        pespiratoryRate
       )
       let ageValue = []
       if (age[1] && age[1].rows) {
         ageValue = age[1].rows
       }
-      res
-        .status(200)
-        .json({
-          religion,
-          gender,
-          age: ageValue,
-          ethnicity,
-          marital,
-          admissionType,
-          admissionLocation,
-          insurance,
-          icutype,
-        })
+      let hospitalLosValue = []
+      if (hospitalLos[1] && hospitalLos[1].rows) {
+        hospitalLosValue = hospitalLos[1].rows
+      }
+      let icuLosValue = []
+      if (icuLos[1] && icuLos[1].rows) {
+        icuLosValue = icuLos[1].rows
+      }
+      res.status(200).json({
+        religion,
+        gender,
+        age: ageValue,
+        ethnicity,
+        marital,
+        admissionType,
+        admissionLocation,
+        insurance,
+        icutype,
+        hospitalLos: hospitalLosValue,
+        icuLos: icuLosValue,
+        heartRate,
+        temperature,
+        bloodPressure,
+        pespiratoryRate,
+      })
     }
   )
 })
@@ -370,7 +396,7 @@ app.get('/api/icd/search', (req, res) => {
   })
 })
 
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
   console.log(`server stared on port ${PORT}`)
