@@ -1,0 +1,24 @@
+.home-container {
+  background-color: #f9f9f9;
+  margin: 0 0 30px;
+  padding-top: 30px;
+}
+
+.home-container-h2 {
+  margin-bottom: 10px;
+  border-left: #111 2px solid;
+  padding-left: 6px;
+  font-size: 30px;
+  margin-left: 3px;
+  margin-top: 9px;
+  margin-block-start: 0.83em;
+  margin-block-end: 0.83em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  display: block;
+}
+
+.home-container-p {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
