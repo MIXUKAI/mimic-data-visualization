@@ -7,10 +7,10 @@ export default function Selector({
   title,
   buttons = [],
   options = [],
-  showSlider = false,
+  slider = false,
   domain = [0, 120],
   checked,
-  toggleCheckbox,
+  onToggle,
   onButtonClick,
   onOptionChange,
   onSliderChange,
@@ -21,7 +21,7 @@ export default function Selector({
   input,
   icdSearched,
   showStep,
-  showCheckBox = true,
+  toggle = true,
   onStepChange,
 }) {
   return (
@@ -34,10 +34,18 @@ export default function Selector({
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {showCheckBox ? (
-            <Checkbox toggle onChange={toggleCheckbox} checked={checked} />
+          {toggle ? (
+            <Checkbox toggle onChange={onToggle} checked={checked} />
           ) : null}
-          <span style={{ marginLeft: '10px' }}>{title}</span>
+          <span
+            style={
+              checked || !toggle
+                ? { marginLeft: '10px' }
+                : { marginLeft: '10px', color: '#aaa' }
+            }
+          >
+            {title}
+          </span>
         </div>
         {showStep ? (
           <>
@@ -75,7 +83,7 @@ export default function Selector({
         </Button.Group>
       ) : null}
 
-      {showSlider ? (
+      {slider ? (
         <Slider
           onChange={values => {
             onSliderChange(values)

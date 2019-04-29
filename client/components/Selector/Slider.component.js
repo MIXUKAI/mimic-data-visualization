@@ -29,7 +29,6 @@ class Example extends Component {
           step={1}
           domain={domain}
           rootStyle={sliderStyle}
-          // onUpdate={this.onUpdate}
           onChange={this.onChange}
           values={values}
           disabled={disabled}

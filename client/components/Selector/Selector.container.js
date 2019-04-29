@@ -4,54 +4,45 @@ import { connect } from 'react-redux'
 
 import Selector from './Selector.component'
 
-import { select, defaultSelector } from './Selector.duck'
+import {
+  setButtons,
+  setInput,
+  setOptions,
+  setSlider,
+  setToggle,
+} from './Selector.duck'
 
 class SelectorContainer extends Component {
   constructor(props) {
     super(props)
-    this.debouncedUpdate = debounce(this.updateState, 1000).bind(this)
   }
 
-  updateState = (k, v, type = 'button', cb) => {
-    const { name } = this.props
-    this.props.select(name, { [k]: v, type })
-    cb && cb(v)
-  }
-
-  toggleCheckbox = () => {
-    const { currentSelector } = this.props
-    this.updateState('checked', !currentSelector.checked)
+  handleToggle = () => {
+    const { selected, name } = this.props
+    this.props.setToggle(name, !selected.checked)
   }
 
   handleButtonClick = e => {
-    const { currentSelector } = this.props
+    const { selected, name } = this.props
     const textContent = e.target.textContent
-    const newValue =  [...currentSelector.buttonValue]
-    const index = currentSelector.buttonValue.indexOf(textContent)
+    const newValue = [...selected.buttonValue]
+    const index = selected.buttonValue.indexOf(textContent)
     if (index === -1) {
       newValue.push(textContent)
     } else {
       newValue.splice(index, 1)
     }
-    this.updateState('buttonValue', newValue, 'button')
+    this.props.setButtons(name, newValue)
   }
 
   handleOptionChange = e => {
-    this.updateState('optionValue', e.target.textContent, 'option')
+    const { name } = this.props
+    this.props.setOptions(name, e.target.textContent)
   }
 
   handleSliderChange = values => {
-    this.updateState('sliderValue', values, 'slider')
-  }
-
-  handleInputChange = e => {
-    this.debouncedUpdate('inputValue', e.target.value, 'input', value => {
-      this.props.onInputChanged && this.props.onInputChanged(value)
-    })
-  }
-
-  handleStepChange = (e) => {
-    this.debouncedUpdate('step', e.target.value, 'step')
+    const { name } = this.props
+    this.props.setSlider(name, values)
   }
 
   render() {
@@ -64,14 +55,12 @@ class SelectorContainer extends Component {
     return (
       <Selector
         {...this.props}
-        {...this.props.currentSelector}
+        {...this.props.selected}
         options={formatedOptions}
-        toggleCheckbox={this.toggleCheckbox}
+        onToggle={this.handleToggle}
         onButtonClick={this.handleButtonClick}
         onOptionChange={this.handleOptionChange}
         onSliderChange={this.handleSliderChange}
-        onInputChange={this.handleInputChange}
-        onStepChange={this.handleStepChange}
       />
     )
   }
@@ -79,12 +68,11 @@ class SelectorContainer extends Component {
 
 const mapState = (state, props) => {
   return {
-    currentSelector: state.userSelect[props.name] || defaultSelector,
-    icdSearched: state.explore.icdSearched,
+    selected: state.userSelect[props.name],
   }
 }
 
 export default connect(
   mapState,
-  { select }
+  { setButtons, setInput, setToggle, setSlider, setOptions }
 )(SelectorContainer)

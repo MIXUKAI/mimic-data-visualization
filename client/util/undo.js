@@ -1,20 +1,20 @@
-function undoable(reducer, unoname = 'UNDO', redoname = 'REDO') {
+const undoable = (reducer, unoname = 'UNDO', redoname = 'REDO') => {
   const initialState = {
     past: [],
     present: reducer(undefined, {}),
     future: [],
   }
 
-  return function(state = initialState, action) {
+  return (state = initialState, action) => {
     const { past, present, future } = state
 
     switch (action.type) {
       case unoname:
-        const previous = past[past.length - 1]
+        const prev = past[past.length - 1]
         const newPast = past.slice(0, past.length - 1)
         return {
           past: newPast,
-          present: previous,
+          present: prev,
           future: [present, ...future],
         }
       case redoname:

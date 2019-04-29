@@ -30,38 +30,40 @@ const VerticalSidebar = ({
     vertical
     visible={visible}
     width="wide"
-    style={{ backgroundColor: 'rgba(255,255,255,.8)'}}
+    style={{ backgroundColor: 'rgba(255,255,255,.8)' }}
   >
     <Menu vertical style={{ width: '100%', borderRadius: 0 }}>
       <Button
         onClick={toggleSidebar}
         style={{ width: '100%', borderRadius: 0 }}
       >
-        <Icon name="backward"/>
+        <Icon name="backward" />
         收起来
       </Button>
       <ToggleMenuItem itemName="Selection Criteria">
         <Selector
-          showCheckBox={false}
+          toggle={false}
           buttons={['CCU', 'CSRU', 'MICU', 'SICU']}
-          title="First ICU Service"
+          title="请选择第一个重症监护室服务"
           name="icu"
         />
         <Selector
-          showCheckBox={false}
+          toggle={false}
           buttons={['Male', 'Female']}
-          title="Gender"
+          title="请选择性别"
           name="gender"
         />
-        <Selector title="Age" name="age" showSlider showCheckBox={false} />
+
+        <Selector title="请选择年龄范围" name="age" toggle={false} slider />
+
         <Selector title="Primary ICD9" name="icd9" options={selectOptions} />
-        <Selector
+        {/* <Selector
           title="search ICD"
           name="searchICD"
           input
           onInputChanged={searchICD}
-          showCheckBox={false}
-        />
+          toggle={false}
+        /> */}
       </ToggleMenuItem>
       {Object.keys(menus).map(groupName => {
         return (
