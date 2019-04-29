@@ -17,7 +17,7 @@ class Home extends Component {
       backgroundColor: getColors(),
     })
     return (
-      <div style={{ backgroundColor: '#f9f9f9'}}>
+      <div style={{ backgroundColor: '#f9f9f9' }}>
         <Head />
         <Container className="home-container">
           <h2 className="home-container-h2">Welcome!</h2>
@@ -76,4 +76,4 @@ const mapState = state => {
   }
 }
 
-export default withCurrentView(connect(mapState)(Home))
+export default connect(mapState)(withCurrentView(Home))
