@@ -31,7 +31,7 @@ class PushableSideBar extends Component {
     const icuValue = this.getValue(icu)
     const ageValue = this.getValue(age)
     const genderValue = this.getValue(gender)
-    console.log(icuValue, ageValue, genderValue)
+    console.log(icuValue, ageValue, genderValue, show_age)
     this.props.explore({
       age: ageValue,
       gender: genderValue,

@@ -6,9 +6,8 @@ import { SET_USER_SELECT } from '../Selector/Selector.duck'
 export const SET_DEMOGRAPHIC = 'SET_DEMOGRAPHIC'
 export const SET_FETCHING = 'SET_FETCHING'
 export const SET_SEARCH_ICD = 'SET_SEARCH_ICD'
-export const explore = ({ age, icu, gender, show_age }) => async (dispatch, getState) => {
+export const explore = ({ age, icu, gender, show_age }) => async (dispatch) => {
   dispatch(setFetching(true))
-  const selected = getState().userSelect
   try {
     const { data } = await Api.get('/explore', {
       params: {
@@ -20,7 +19,7 @@ export const explore = ({ age, icu, gender, show_age }) => async (dispatch, getS
     })
     if (data) {
       dispatch(setFetching(false))
-      dispatch({ type: SET_DEMOGRAPHIC, payload: data, selected })
+      dispatch({ type: SET_DEMOGRAPHIC, payload: data })
     }
   } catch (error) {
     dispatch(setFetching(false))
@@ -69,9 +68,9 @@ export const setFetching = (isFetching) => dispatch => {
 
 const isFetching = (state = false, action) => {
   if (action.type === SET_FETCHING) {
-    return true
+    return action.payload
   }
-  return false
+  return state
 }
 
 export default combineReducers({

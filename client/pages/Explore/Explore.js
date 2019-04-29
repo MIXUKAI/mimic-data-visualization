@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Responsive, Grid } from 'semantic-ui-react'
+import { Grid, Button } from 'semantic-ui-react'
 import { Pie, Bar } from 'react-chartjs-2'
 
 import withCurrentView from '../../hoc/withCurrentView'
@@ -71,11 +71,11 @@ class Explore extends Component {
     console.log(this.props.demoGraphicHistory)
     const { modal } = this.props
     const {
-      religion,
-      gender,
-      ethnicity,
-      marital,
-      age,
+      religion = [],
+      gender = [],
+      ethnicity = [],
+      marital = [],
+      age = [],
       icutype = [],
       insurance = [],
       admissionType = [],
@@ -155,10 +155,9 @@ class Explore extends Component {
           className="Modal"
           overlayClassName="Overlay"
         >
-          <h2 ref={subtitle => (this.subtitle = subtitle)}>Hello</h2>
-          <button onClick={() => this.props.setModalOpen({ open: false })}>
+          <Button onClick={() => this.props.setModalOpen({ open: false })} primary>
             close
-          </button>
+          </Button>
           {modal.data.datasets.length ? (
             <ModalChart
               height={100}
@@ -166,6 +165,14 @@ class Explore extends Component {
               options={{
                 legend: {
                   position: 'right',
+                  display: modal.data.type !== 'Bar',
+                },
+                title: {
+                  display: true,
+                  text: modal.data.title,
+                  fontSize: 30,
+                  fontColor: '#666',
+                  position: modal.data.type === 'Bar' ? 'top' : 'left',
                 },
               }}
             />

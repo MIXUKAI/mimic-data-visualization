@@ -32,7 +32,7 @@ export const defaultSelector = {
   optionValue: '',
   inputValue: '',
   sliderValue: [20, 80],
-  type: ''
+  type: 'button'
 }
 
 function createSelectorWithNameData(
@@ -84,13 +84,10 @@ export const selectHistory = undoable((state = {}, action) => {
   return state
 })
 
+const defaultShowSelector = { checked: true, step: 4 }
 let showSelectors = {}
 menuSelectors.forEach(s => {
-  showSelectors[s] = createSelectorWithNameData(s, {
-    ...defaultSelector,
-    checked: true,
-    step: 4,
-  })
+  showSelectors[s] = createSelectorWithNameData(s, defaultShowSelector)
 })
 // const showSelectors = menuSelectors.reduce(
 //   (pre, cur) => { return pre[cur] = createSelectorWithNameData(cur)},

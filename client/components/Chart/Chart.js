@@ -16,7 +16,7 @@ class Chart extends React.Component {
 
     this.onElementsClick = () => {
       const { data, type } = this.props
-      this.props.setModalOpen({ data, type, open: true })
+      this.props.setModalOpen({ data: { ...data, type }, type, open: true })
     }
     const newData = type !== 'Bar' ? {
       ...data,

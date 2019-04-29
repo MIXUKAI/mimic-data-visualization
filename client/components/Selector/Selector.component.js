@@ -26,11 +26,12 @@ export default function Selector({
 }) {
   return (
     <Segment style={{ marginTop: 0, borderRadius: 0, borderRightWidth: 0 }}>
-      <p
+      <div
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          marginBottom: '10px'
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -63,7 +64,7 @@ export default function Selector({
             </datalist>
           </>
         ) : null}
-      </p>
+      </div>
 
       {buttons.length ? (
         <Button.Group>
@@ -114,11 +115,11 @@ export default function Selector({
             onChange={onInputChange}
           />
           <datalist id="datalist">
-            {icdSearched.length
+            {/* {icdSearched.length
               ? icdSearched.map(icd => (
                   <option value={icd.short_title} key={icd.icd9_code} />
                 ))
-              : []}
+              : []} */}
             {/* <option value='English' />
             <option value='Chinese' />
             <option value='Dutch' /> */}
