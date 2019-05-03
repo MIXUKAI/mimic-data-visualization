@@ -6,7 +6,6 @@ import LayoutContainer from './components/AppContainer/Layout.componet'
 
 import HomePage from './pages/Home/Home'
 import ExplorePage from './pages/Explore/Explore'
-import ComparePage from './pages/Compare/Compare'
 
 import configStore from './store'
 
@@ -19,7 +18,6 @@ class App extends Component {
         <LayoutContainer>
           <Route path="/" exact component={HomePage} />
           <Route path="/explore" component={ExplorePage} />
-          <Route path="/compare" component={ComparePage} />
         </LayoutContainer>
       </Provider>
     )

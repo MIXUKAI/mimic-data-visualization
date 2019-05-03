@@ -50,7 +50,7 @@ function createSelectorWithNameData(
       case SET_OPTIONS:
         return { ...state, optionValue: value, type: 'option' }
       case SET_SLIDER:
-        return { ...state, slider: value, type: 'slider' }
+        return { ...state, sliderValue: value, type: 'slider' }
       case SET_INPUT:
         return { ...state, inputValue: value, type: 'input' }
       default:

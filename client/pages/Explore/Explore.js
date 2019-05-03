@@ -76,7 +76,7 @@ class Explore extends Component {
       ethnicity = [],
       marital = [],
       age = [],
-      icutype = [],
+      icuType = [],
       insurance = [],
       admissionType = [],
       admissionLocation = [],
@@ -103,7 +103,7 @@ class Explore extends Component {
 
     const administrative = []
     this.formatDemographicData(
-      icutype,
+      icuType,
       'first_careunit',
       '重症监护室类型',
       administrative,
@@ -151,7 +151,6 @@ class Explore extends Component {
         <Modal
           isOpen={modal.open}
           onRequestClose={this.closeModal}
-          contentLabel="Example Modal"
           className="Modal"
           overlayClassName="Overlay"
         >
