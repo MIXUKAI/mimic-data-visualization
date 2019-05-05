@@ -3,6 +3,7 @@ const Sequelize = require('sequelize')
 const { sequelize } = require('../db')
 const Pai = require('../models/pai')(sequelize, Sequelize)
 const demographicConfig = require('../chart_config').demographic
+const selectionConfig = require('../selectionConfig')
 const Op = Sequelize.Op
 
 const { attributesRange } = require('../util')
@@ -17,31 +18,28 @@ const queryCommonFields = (config = {}, req, addtionConfig) => {
   } = config
 
   let where = {}
-  if (req.query.icu && req.query.icu.length) {
-    where.first_careunit = {
-      [Op.or]: req.query.icu.map(name => name),
+  Object.keys(selectionConfig).forEach(k => {
+    const config = selectionConfig[k]
+    const value =
+      config.type === 'slider'
+        ? req.query[k].map(v => parseInt(v))
+        : req.query[k]
+    if (value) {
+      where[config.filed] = {
+        [config.where === 'between' ? Op.between : Op.or]: value,
+      }
     }
-  }
-  if (req.query.age && req.query.age.length) {
-    where.age = {
-      [Op.between]: req.query.age.map(a => parseInt(a)),
-    }
-  }
-  if (req.query.gender && req.query.gender.length) {
-    where.gender = {
-      [Op.or]: req.query.gender.map(gender => gender),
-    }
-  }
+  })
   where = { ...where, ...configWhere }
   console.log('where', where, config)
   return new Promise((resolve, reject) => {
     Pai.findAll({
       where,
       group: type === 'bar' ? '' : group,
-      attributes: type === 'bar' ? addtionConfig.attributes : [
-        countAttribute,
-        [sequelize.fn('count', countAttribute), 'count'],
-      ],
+      attributes:
+        type === 'bar'
+          ? addtionConfig.attributes
+          : [countAttribute, [sequelize.fn('count', countAttribute), 'count']],
       raw: true,
     }).then(resolve)
   })
@@ -54,7 +52,7 @@ const querySelectedDemographic = req => {
     if (config.type === 'bar') {
       query.push(
         queryCommonFields(config, req, {
-          attributes: attributesRange(k, req.query[k][0], req.query[k][1], 5)
+          attributes: attributesRange(k, req.query[k][0], req.query[k][1], 5),
         })
       )
     } else {

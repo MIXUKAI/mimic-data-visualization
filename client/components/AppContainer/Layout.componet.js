@@ -6,38 +6,11 @@ import Navigator from '../Navigator/Navigator.component'
 import VerticalSidebar from '../SideBar/SideBar.component'
 import { toggleSidebar } from '../SideBar/SideBar.duck'
 import { explore, searchICD } from './AppContainer.duck'
+import selectionConfig from '../../selectionConfig'
 
 class PushableSideBar extends Component {
-  getValue = item => {
-    switch (item.type) {
-      case 'button':
-        return item.buttonValue
-      case 'option':
-        return item.optionValue
-      case 'slider':
-        return item.sliderValue
-      case 'input':
-        return item.inputValue
-      case 'step':
-        return item.step
-      default:
-        return item.checked
-    }
-  }
-
   plot = () => {
-    const { userSelect } = this.props
-    const { icu, age, gender, show_age } = userSelect
-    const icuValue = this.getValue(icu)
-    const ageValue = this.getValue(age)
-    const genderValue = this.getValue(gender)
-    console.log(icuValue, ageValue, genderValue, show_age)
-    this.props.explore({
-      age: ageValue,
-      gender: genderValue,
-      icu: icuValue,
-      show_age,
-    })
+    this.props.explore(this.props.userSelect)
   }
 
   render() {

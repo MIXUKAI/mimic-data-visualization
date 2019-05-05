@@ -2,21 +2,39 @@ import { combineReducers } from 'redux'
 import Api from '../../util/fetch'
 import undoable from '../../util/undo'
 import { SET_USER_SELECT } from '../Selector/Selector.duck'
+import selectionConfig from '../../selectionConfig'
+
+const getValue = item => {
+  switch (item.type) {
+    case 'button':
+      return item.buttonValue
+    case 'option':
+      return item.optionValue
+    case 'slider':
+      return item.sliderValue
+    case 'input':
+      return item.inputValue
+    case 'step':
+      return item.step
+    default:
+      return item.checked
+  }
+}
 
 export const SET_DEMOGRAPHIC = 'SET_DEMOGRAPHIC'
 export const SET_FETCHING = 'SET_FETCHING'
 export const SET_SEARCH_ICD = 'SET_SEARCH_ICD'
-export const explore = ({ age, icu, gender, show_age }) => async (dispatch) => {
+export const explore = (userSelect) => async (dispatch) => {
   dispatch(setFetching(true))
   try {
-    const { data } = await Api.get('/explore', {
-      params: {
-        age,
-        icu,
-        gender: gender.map(g => g === 'Male' ? 'M' : 'F'),
-        show_age: [show_age.checked, show_age.step],
-      }
+    const params = {}
+    Object.keys(selectionConfig).forEach(k => {
+      const config = selectionConfig[k]
+      const s = { ...userSelect[k], type: config.type }
+      params[k] = getValue(s)
     })
+    console.log(params)
+    const { data } = await Api.get('/explore', { params })
     if (data) {
       dispatch(setFetching(false))
       dispatch({ type: SET_DEMOGRAPHIC, payload: data })

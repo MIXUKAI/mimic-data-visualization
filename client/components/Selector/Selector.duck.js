@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 // import { produce } from 'immer'
 
+import selectionConfig from '../../selectionConfig'
 import undoable from '../../util/undo'
 import { SET_DEMOGRAPHIC } from '../AppContainer/AppContainer.duck'
 import { menus } from '../../config'
@@ -32,7 +33,7 @@ export const defaultSelector = {
   optionValue: '',
   inputValue: '',
   sliderValue: [20, 80],
-  type: 'button'
+  type: 'button',
 }
 
 function createSelectorWithNameData(
@@ -95,13 +96,21 @@ menuSelectors.forEach(s => {
 // )
 console.log('showSelectors', showSelectors)
 
+const selections = {}
+Object.keys(selectionConfig).forEach(k => {
+  const config = selectionConfig[k]
+  if (config.type === 'slider') {
+    selections[k] = createSelectorWithNameData(k, {
+      ...defaultSelector,
+      type: 'slider',
+    })
+  } else {
+    selections[k] = createSelectorWithNameData(k)
+  }
+})
+
 export default combineReducers({
-  icu: createSelectorWithNameData('icu'),
-  gender: createSelectorWithNameData('gender'),
-  age: createSelectorWithNameData('age', {
-    ...defaultSelector,
-    type: 'slider',
-  }),
+  ...selections,
   icd9: createSelectorWithNameData('icd9'),
   searchICD: createSelectorWithNameData('searchICD'),
   ...showSelectors,

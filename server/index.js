@@ -8,14 +8,6 @@ const Patients = require('./models/patients')(sequelize, Sequelize)
 const ICUStays = require('./models/icustays')(sequelize, Sequelize)
 const DICD = require('./models/d_icd_diagnoses')(sequelize, Sequelize)
 
-const {
-  queyrArtericalBloodPressure,
-  queryHeartRate,
-  queryPespiratoryRate,
-  queyrTemperature,
-} = require('./controller/vital_sign')
-const { queryHeightCm, queryWeightKg } = require('./controller/miscellaneous')
-
 Patients.hasMany(Admissions, { foreignKey: 'subject_id' })
 Patients.hasMany(ICUStays, { foreignKey: 'subject_id' })
 Admissions.belongsTo(Patients, {
@@ -24,10 +16,10 @@ Admissions.belongsTo(Patients, {
 })
 
 const { querySelectedDemographic } = require('./controller/demographic')
+const { querySelectedAdministrative } = require('./controller/administrative')
 const {
-  querySelectedAdministrative,
-} = require('./controller/administrative')
-const { querySelectedPatientsOutComes } = require('./controller/patients_outcomes')
+  querySelectedPatientsOutComes,
+} = require('./controller/patients_outcomes')
 const chartConfig = require('./chart_config')
 const chartList = []
 Object.keys(chartConfig).forEach(groupKey => {
@@ -74,105 +66,12 @@ app.get('/api/hello', (req, res) => {
 
 app.get('/api/explore', (req, res) => {
   console.log('mxkxxkxmxkx', req.query)
-
-  Promise.all(
-    [
-      ...querySelectedDemographic(req),
-      ...querySelectedAdministrative(req),
-      ...querySelectedPatientsOutComes(req),
-    ]
-    // queryReligion(req)
-    // queryDemographic(req, 'admissions.religion'),
-    // queryDemographic(req, 'patients.gender'),
-    // queryAge(req, 3),
-    // queryDemographic(req, 'admissions.ethnicity'),
-    // queryDemographic(req, 'admissions.marital_status'),
-    // queryDemographic(req, 'admissions.admission_type'),
-    // queryDemographic(req, 'admissions.admission_location'),
-    // queryDemographic(req, 'admissions.insurance'),
-    // queryDemographic(req, 'icustays.first_careunit'),
-    // queryHospitalLos(req, 5),
-    // queryICULos(req, 4),
-    // queryHeartRate(req, { min: 28, max: 140, step: 12 }),
-    // queyrTemperature(req, { min: 80, max: 104, step: 2 }),
-    // queyrArtericalBloodPressure(req, { min: 44, max: 190, step: 15 }),
-    // queryPespiratoryRate(req, { min: 0, max: 36, step: 4 }),
-    // queryHeightCm(req, { min: 136, max: 210, step: 5 }),
-    // queryWeightKg(req, { min: 21, max: 140, step: 10 })
-    // queryEvents(req, null, 'max', 618)
-  ).then((
-    result
-    // []
-    // religion,
-    // gender,
-    // age,
-    // ethnicity,
-    // marital,
-    // admissionType,
-    // admissionLocation,
-    // insurance,
-    // icutype,
-    // hospitalLos,
-    // icuLos,
-    // heartRate,
-    // temperature,
-    // bloodPressure,
-    // pespiratoryRate,
-    // height,
-    // weight,
-    // ]
-  ) => {
+  Promise.all([
+    ...querySelectedDemographic(req),
+    ...querySelectedAdministrative(req),
+    ...querySelectedPatientsOutComes(req),
+  ]).then(result => {
     console.log('res', result)
-    // console.log(
-    // religion,
-    // gender,
-    // age,
-    // ethnicity,
-    // marital,
-    // admissionType,
-    // admissionLocation,
-    // insurance,
-    // icutype,
-    // hospitalLos,
-    // icuLos,
-    // heartRate,
-    // temperature,
-    // bloodPressure,
-    // pespiratoryRate,
-    // height,
-    // weight
-    // )
-    // let ageValue = []
-    // if (age[1] && age[1].rows) {
-    //   ageValue = age[1].rows
-    // }
-    // let hospitalLosValue = []
-    // if (hospitalLos[1] && hospitalLos[1].rows) {
-    //   hospitalLosValue = hospitalLos[1].rows
-    // }
-    // let icuLosValue = []
-    // if (icuLos[1] && icuLos[1].rows) {
-    //   icuLosValue = icuLos[1].rows
-    // }
-    // res.status(200).json({
-    //   religion,
-    // gender,
-    // age: ageValue,
-    // ethnicity,
-    // marital,
-    // admissionType,
-    // admissionLocation,
-    // insurance,
-    // icutype,
-    // hospitalLos: hospitalLosValue,
-    // icuLos: icuLosValue,
-    // heartRate,
-    // temperature,
-    // bloodPressure,
-    // pespiratoryRate,
-    // height,
-    // weight,
-    // })
     const r = {}
     result.forEach((value, i) => {
       r[chartList[i]] = value
@@ -196,7 +95,7 @@ app.get('/api/icd/search', (req, res) => {
   })
 })
 
-const PORT = process.env.PORT || 8080 
+const PORT = process.env.PORT || 8080
 
 app.listen(PORT, () => {
   console.log(`server stared on port ${PORT}`)

@@ -126,6 +126,11 @@ export default function Selector({
           </datalist>
         </>
       ) : null}
+      <div>
+        <span style={{fontSize: 16, color: '#2185D0'}}>
+          {buttonValue}
+        </span>
+      </div>
     </Segment>
   )
 }

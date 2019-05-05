@@ -5,6 +5,7 @@ import { Sidebar, Menu, Icon, Button, Header } from 'semantic-ui-react'
 import Selector from '../Selector/Selector.container'
 import ToggleMenuItem from './ToggleMenuItem.component'
 import { menus } from '../../config'
+import selectionConfig from '../../selectionConfig'
 
 const selectOptions = [
   'Infectious or Parasitic Disease',
@@ -24,12 +25,12 @@ const VerticalSidebar = ({
   toggleSidebar,
 }) => (
   <Sidebar
-    animation="push"
+    animation="overlay"
     direction="left"
     icon="labeled"
     vertical
     visible={visible}
-    width="wide"
+    width="very wide"
     style={{ backgroundColor: 'rgba(255,255,255,.8)' }}
   >
     <Menu vertical style={{ width: '100%', borderRadius: 0 }}>
@@ -41,11 +42,35 @@ const VerticalSidebar = ({
         收起来
       </Button>
       <ToggleMenuItem itemName="Selection Criteria">
-        <Selector
+        {Object.keys(selectionConfig).map(k => {
+          const config = selectionConfig[k]
+          const props = {
+            toggle: false,
+            title: config.title,
+            name: k,
+          }
+          if (config.type === 'slider') {
+            props.slider = true
+          } else {
+            props.buttons = config.value
+          }
+          return (
+            <Selector
+              {...props}
+            />
+          )
+        })}
+        {/* <Selector
           toggle={false}
-          buttons={['CCU', 'CSRU', 'MICU', 'SICU']}
+          buttons={['CCU', 'CSRU', 'MICU', 'SICU', 'NICU', 'TSICU']}
           title="请选择第一个重症监护室服务"
           name="icu"
+        />
+        <Selector
+          toggle={false}
+          buttons={['EMERGENCY', 'NEWBORN', 'ELECTIVE', 'URGENT']}
+          title="请选择入院的类型"
+          name="admissionType"
         />
         <Selector
           toggle={false}
@@ -53,10 +78,16 @@ const VerticalSidebar = ({
           title="请选择性别"
           name="gender"
         />
+        <Selector
+          toggle={false}
+          buttons={['MARRIED', 'SINGLE', 'DIVORCED']}
+          title="婚姻状况"
+          name="marital"
+        />
 
-        <Selector title="请选择年龄范围" name="age" toggle={false} slider />
+        <Selector title="请选择年龄范围" name="age" toggle={false} slider /> */}
 
-        <Selector title="Primary ICD9" name="icd9" options={selectOptions} />
+        {/* <Selector title="Primary ICD9" name="icd9" options={selectOptions} /> */}
         {/* <Selector
           title="search ICD"
           name="searchICD"
