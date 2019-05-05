@@ -5,6 +5,8 @@ const Pai = require('../models/pai')(sequelize, Sequelize)
 const demographicConfig = require('../chart_config').demographic
 const Op = Sequelize.Op
 
+const { attributesRange } = require('../util')
+
 const queryCommonFields = (config = {}, req, addtionConfig) => {
   const {
     group,
@@ -45,34 +47,6 @@ const queryCommonFields = (config = {}, req, addtionConfig) => {
   })
 }
 
-function range(value, min = 25, max = 140, step = 15) {
-  const res = []
-  let i = +min
-  for (; i + step < max; i += step) {
-    res.push([
-      Sequelize.literal(
-        `count(case when ${value} >= ${i} and ${value} < ${i +
-        step} then 1 end)`
-      ),
-      `gte${i}_lt${i + step}`,
-    ])
-  }
-  res.push([
-    Sequelize.literal(
-      `count(case when ${value} >= ${i} and ${value} < ${max} then 1 end)`
-    ),
-    `gte${i}_lt${max}`,
-  ])
-  res.push([
-    Sequelize.literal(
-      `count(case when ${value} >= ${max} then 1 end)`
-    ),
-    `gte${max}`
-  ])
-  console.log('res', res)
-  return res
-}
-
 const querySelectedDemographic = req => {
   const query = []
   Object.keys(demographicConfig).forEach(k => {
@@ -80,7 +54,7 @@ const querySelectedDemographic = req => {
     if (config.type === 'bar') {
       query.push(
         queryCommonFields(config, req, {
-          attributes: range(k, req.query[k][0], req.query[k][1], 5)
+          attributes: attributesRange(k, req.query[k][0], req.query[k][1], 5)
         })
       )
     } else {

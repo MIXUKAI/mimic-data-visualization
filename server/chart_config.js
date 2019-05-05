@@ -38,6 +38,16 @@ const chart_config = {
       group: 'insurance',
       countAttribute: 'insurance',
     }
+  },
+  patientsOutComes: {
+    hos_los: {
+      type: 'bar',
+      step: 3,
+    },
+    icu_los: {
+      type: 'bar',
+      step: 3,
+    }
   }
 }
 

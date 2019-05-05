@@ -25,8 +25,9 @@ Admissions.belongsTo(Patients, {
 
 const { querySelectedDemographic } = require('./controller/demographic')
 const {
-  querySelectedAdministrativeConfig,
+  querySelectedAdministrative,
 } = require('./controller/administrative')
+const { querySelectedPatientsOutComes } = require('./controller/patients_outcomes')
 const chartConfig = require('./chart_config')
 const chartList = []
 Object.keys(chartConfig).forEach(groupKey => {
@@ -286,7 +287,8 @@ app.get('/api/explore', (req, res) => {
   Promise.all(
     [
       ...querySelectedDemographic(req),
-      ...querySelectedAdministrativeConfig(req),
+      ...querySelectedAdministrative(req),
+      ...querySelectedPatientsOutComes(req),
     ]
     // queryReligion(req)
     // queryDemographic(req, 'admissions.religion'),

@@ -80,8 +80,8 @@ class Explore extends Component {
       insurance = [],
       admissionType = [],
       admissionLocation = [],
-      hospitalLos = [],
-      icuLos = [],
+      hos_los = [],
+      icu_los = [],
       heartRate = [],
       temperature = [],
       bloodPressure = [],
@@ -129,8 +129,8 @@ class Explore extends Component {
     )
 
     const patientOutcomes = []
-    this.handleBarData(hospitalLos, '患者医院所呆时长', patientOutcomes)
-    this.handleBarData(icuLos, '患者重症监护室所呆时长', patientOutcomes)
+    this.handleBarData(hos_los, '患者医院所呆时长', patientOutcomes)
+    this.handleBarData(icu_los, '患者重症监护室所呆时长', patientOutcomes)
     const vitalSigns = []
     this.handleBarData(heartRate, '心率', vitalSigns)
     this.handleBarData(temperature, '体温', vitalSigns)
