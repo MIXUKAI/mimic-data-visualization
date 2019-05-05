@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('pai', {
+  return sequelize.define('pai_weight_kg', {
     subject_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -83,7 +83,23 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    value: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    valuenum: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    valueuom: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    charttime: {
+      type: DataTypes.DATE,
+      allowNull: false
+    }
   }, {
-    tableName: 'pai'
+    tableName: 'pai_weight_kg'
   });
 };

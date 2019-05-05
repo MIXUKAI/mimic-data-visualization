@@ -48,6 +48,16 @@ const chart_config = {
       type: 'bar',
       step: 3,
     }
+  },
+  miscellaneous: {
+    weight: {
+      type: 'bar',
+      step: 5
+    },
+    height: {
+      type: 'bar',
+      step: 5
+    }
   }
 }
 
