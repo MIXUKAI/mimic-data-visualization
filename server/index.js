@@ -20,6 +20,7 @@ const { querySelectedAdministrative } = require('./controller/administrative')
 const {
   querySelectedPatientsOutComes,
 } = require('./controller/patients_outcomes')
+const { queryVitalSign } = require('./controller/vital_sign')
 const chartConfig = require('./chart_config')
 const chartList = []
 Object.keys(chartConfig).forEach(groupKey => {
@@ -70,6 +71,7 @@ app.get('/api/explore', (req, res) => {
     ...querySelectedDemographic(req),
     ...querySelectedAdministrative(req),
     ...querySelectedPatientsOutComes(req),
+    ...queryVitalSign(req),
   ]).then(result => {
     console.log('res', result)
     const r = {}

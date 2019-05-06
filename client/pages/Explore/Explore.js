@@ -52,11 +52,12 @@ class Explore extends Component {
       ? Object.keys(sourceData[0]).filter(key => key !== 'count')
       : []
     sourceData.length &&
+      Object.keys(sourceData[0]).some(k => +sourceData[0][k] > 0) &&
       result.datasets.push({
         data: sourceData.length
           ? Object.keys(sourceData[0])
-            .filter(k => k !== 'count')
-            .map(k => sourceData[0][k])
+              .filter(k => k !== 'count')
+              .map(k => sourceData[0][k])
           : [],
         backgroundColor: getColors(
           sourceData.length
@@ -84,10 +85,10 @@ class Explore extends Component {
       icu_los = [],
       heartRate = [],
       temperature = [],
-      bloodPressure = [],
+      artericalBloodPressure = [],
       pespiratoryRate = [],
       height = [],
-      weight = [],
+      weightKg = [],
     } = this.props.demographic
     const demographic = []
     this.handleBarData(age, '年龄分布', demographic)
@@ -134,11 +135,11 @@ class Explore extends Component {
     const vitalSigns = []
     this.handleBarData(heartRate, '心率', vitalSigns)
     this.handleBarData(temperature, '体温', vitalSigns)
-    this.handleBarData(bloodPressure, '血压', vitalSigns)
+    this.handleBarData(artericalBloodPressure, '血压', vitalSigns)
     this.handleBarData(pespiratoryRate, '呼吸频率', vitalSigns)
     const miscellaneous = []
     this.handleBarData(height, '身高(cm)', miscellaneous)
-    this.handleBarData(weight, '体重(kg)', miscellaneous)
+    this.handleBarData(weightKg, '体重(kg)', miscellaneous)
 
     let ModalChart = Pie
     if (modal.type === 'Bar') {
@@ -154,7 +155,10 @@ class Explore extends Component {
           className="Modal"
           overlayClassName="Overlay"
         >
-          <Button onClick={() => this.props.setModalOpen({ open: false })} primary>
+          <Button
+            onClick={() => this.props.setModalOpen({ open: false })}
+            primary
+          >
             close
           </Button>
           {modal.data.datasets.length ? (

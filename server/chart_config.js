@@ -49,6 +49,26 @@ const chart_config = {
       step: 3,
     }
   },
+  vitalSign: {
+    weightKg: {
+      modal: 'pai_weight_kg',
+    },
+    height: {
+      modal: 'pai_height_cm'
+    },
+    heartRate: {
+      modal: 'pai_heart_rate'
+    },
+    artericalBloodPressure: {
+      modal: 'pai_arterical_blood_pressure'
+    },
+    temperature: {
+      modal: 'pai_temperature_c'
+    },
+    pespiratoryRate: {
+      modal: 'pai_pespiratory_rate'
+    }
+  },
   miscellaneous: {
     weight: {
       type: 'bar',

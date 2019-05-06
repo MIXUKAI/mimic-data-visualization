@@ -36,7 +36,7 @@ export default function Selector({
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
           {toggle ? (
-            <Checkbox toggle onChange={onToggle} checked={checked} />
+            <Checkbox onChange={onToggle} checked={checked} />
           ) : null}
           <span
             style={
