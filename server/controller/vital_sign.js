@@ -74,15 +74,15 @@ const queryEvents = (config, req) => {
   const { modal } = config
   let where = ''
   Object.keys(selectionConfig).forEach((k, i) => {
-    if (i !== 0) {
-      where += ' AND '
-    }
     const config = selectionConfig[k]
     const value =
-      config.type === 'slider'
-        ? req.query[k].map(v => parseInt(v))
-        : req.query[k]
+    config.type === 'slider'
+    ? req.query[k].map(v => parseInt(v))
+    : req.query[k]
     if (value) {
+      if (i !== 0) {
+        where += ' AND '
+      }
       where += '('
       if (config.where === 'between') {
         where += `${config.filed} between ${value[0]} and ${value[1]}`

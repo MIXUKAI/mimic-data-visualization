@@ -1,21 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Sidebar, Menu, Icon, Button, Header } from 'semantic-ui-react'
+import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react'
 
 import Selector from '../Selector/Selector.container'
 import ToggleMenuItem from './ToggleMenuItem.component'
 import { menus } from '../../config'
 import selectionConfig from '../../selectionConfig'
 
-const selectOptions = [
-  'Infectious or Parasitic Disease',
-  'Neoplasms',
-  'Endocrine, Nutritional and Metabolic, and Immunity Disorders',
-  'Blood or Blood-Forming Organ Disease',
-  'Mental Disorders',
-  'Nervous System Disease',
-  'Sensory Organ Diseaes',
-]
+// const selectOptions = [
+//   'Infectious or Parasitic Disease',
+//   'Neoplasms',
+//   'Endocrine, Nutritional and Metabolic, and Immunity Disorders',
+//   'Blood or Blood-Forming Organ Disease',
+//   'Mental Disorders',
+//   'Nervous System Disease',
+//   'Sensory Organ Diseaes',
+// ]
 
 const VerticalSidebar = ({
   visible = false,
@@ -87,8 +87,8 @@ const VerticalSidebar = ({
 
         <Selector title="请选择年龄范围" name="age" toggle={false} slider /> */}
 
-        {/* <Selector title="Primary ICD9" name="icd9" options={selectOptions} /> */}
-        {/* <Selector
+        {/* <Selector title="Primary ICD9" name="icd9" options={selectOptions} />
+        <Selector
           title="search ICD"
           name="searchICD"
           input

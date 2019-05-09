@@ -6,7 +6,6 @@ import Navigator from '../Navigator/Navigator.component'
 import VerticalSidebar from '../SideBar/SideBar.component'
 import { toggleSidebar } from '../SideBar/SideBar.duck'
 import { explore, searchICD } from './AppContainer.duck'
-import selectionConfig from '../../selectionConfig'
 
 class PushableSideBar extends Component {
   plot = () => {
@@ -14,7 +13,7 @@ class PushableSideBar extends Component {
   }
 
   render() {
-    const { visible, children, toggleSidebar, searchICD, icdSearched, isFetching } = this.props
+    const { visible, children, toggleSidebar, searchICD, isFetching } = this.props
     return (
       <Sidebar.Pushable className="sidebar-container">
         <VerticalSidebar

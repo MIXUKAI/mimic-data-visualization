@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import debounce from 'lodash/debounce'
 import { connect } from 'react-redux'
 
 import Selector from './Selector.component'
@@ -13,10 +12,6 @@ import {
 } from './Selector.duck'
 
 class SelectorContainer extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   handleToggle = () => {
     const { selected, name } = this.props
     this.props.setToggle(name, !selected.checked)

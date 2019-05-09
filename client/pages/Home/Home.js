@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Head from './Head.component'
-import { Container, Header } from 'semantic-ui-react'
+import { Container } from 'semantic-ui-react'
 
 import { getColors } from '../../util/colors'
 import withCurrentView from '../../hoc/withCurrentView'
