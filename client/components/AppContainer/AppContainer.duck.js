@@ -3,6 +3,7 @@ import Api from '../../util/fetch'
 import undoable from '../../util/undo'
 import { SET_USER_SELECT } from '../Selector/Selector.duck'
 import selectionConfig from '../../selectionConfig'
+import { menus as menuConfig } from '../../config'
 
 const getValue = item => {
   switch (item.type) {
@@ -24,10 +25,17 @@ const getValue = item => {
 export const SET_DEMOGRAPHIC = 'SET_DEMOGRAPHIC'
 export const SET_FETCHING = 'SET_FETCHING'
 export const SET_SEARCH_ICD = 'SET_SEARCH_ICD'
-export const explore = (userSelect) => async (dispatch) => {
+export const explore = () => async (dispatch, getState) => {
   dispatch(setFetching(true))
   try {
+    const userSelect = getState().userSelect
     const params = {}
+    Object.keys(menuConfig).forEach((group) => {
+      params[group] = {}
+      menuConfig[group].forEach((selection) => {
+        params[group][selection.name] = userSelect[selection.name]
+      })
+    })
     Object.keys(selectionConfig).forEach(k => {
       const config = selectionConfig[k]
       const s = { ...userSelect[k], type: config.type }

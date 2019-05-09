@@ -9,7 +9,7 @@ import { explore, searchICD } from './AppContainer.duck'
 
 class PushableSideBar extends Component {
   plot = () => {
-    this.props.explore(this.props.userSelect)
+    this.props.explore()
   }
 
   render() {
@@ -35,7 +35,6 @@ class PushableSideBar extends Component {
 
 const mapState = state => ({
   visible: state.sidebar.isSidebarOpen,
-  userSelect: state.userSelect,
   isFetching: state.explore.isFetching,
 })
 

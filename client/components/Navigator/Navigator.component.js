@@ -34,13 +34,15 @@ class Navigator extends Component {
             secondary={!fixed}
             size="large"
           >
-            <Button
-              inverted={!fixed}
-              style={{ marginLeft: '0.5em' }}
-              onClick={() => toggleSidebar()}
-            >
-              <Icon name="sidebar" />
-            </Button>
+            {currentView === 'Explore' ? (
+              <Button
+                inverted={!fixed}
+                style={{ marginLeft: '0.5em' }}
+                onClick={() => toggleSidebar()}
+              >
+                <Icon name="sidebar" />
+              </Button>
+            ) : null}
             <Container>
               {[
                 { view: 'Home', route: '/' },
@@ -55,7 +57,7 @@ class Navigator extends Component {
                   {view}
                 </Menu.Item>
               ))}
-              <Menu.Item as="a">Document</Menu.Item>
+              {/* <Menu.Item as="a">Document</Menu.Item> */}
               {currentView === 'Explore' ? (
                 <Menu.Item position="right">
                   <Button

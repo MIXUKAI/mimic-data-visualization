@@ -1,7 +1,7 @@
 export const menus = {
   demographic: [
     { name: 'show_age', title: 'Age', cname: '年龄', showStep: true },
-    { name: 'show_ehnicity', title: 'Ethnicity', cname: '种族' },
+    { name: 'show_ethnicity', title: 'Ethnicity', cname: '种族' },
     { name: 'show_gender', title: 'Gender', cname: '性别' },
     { name: 'show_marital', title: 'Marital Status', cname: '婚姻状况' },
     { name: 'show_religion', title: 'Religion', cname: '宗教信仰' },
@@ -19,4 +19,10 @@ export const menus = {
     { name: 'show_icuMortality', title: 'ICU Mortality', cname: '重症监护室死亡率比' },
     { name: 'show_icuLenStay', title: 'ICU Length of Stay', cname: '重症监护室时长' },
   ],
+  vitalSigns: [
+    { name: 'heartRate', cname: '心率', mma: true },
+    { name: 'bloodPressure', cname: '血压', mma: true },
+    { name: 'pespiratoryRate', cname: '呼吸频率', mma: true },
+    { name: 'temperature', cname: '体温', mma: true },
+  ]
 }
