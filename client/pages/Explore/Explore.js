@@ -72,11 +72,11 @@ class Explore extends Component {
     console.log(this.props.demoGraphicHistory)
     const { modal } = this.props
     const {
-      religion = [],
-      gender = [],
-      ethnicity = [],
-      marital = [],
-      age = [],
+      show_religion = [],
+      show_gender = [],
+      show_ethnicity = [],
+      show_marital = [],
+      show_age = [],
       icuType = [],
       insurance = [],
       admissionType = [],
@@ -91,12 +91,12 @@ class Explore extends Component {
       weightKg = [],
     } = this.props.demographic
     const demographic = []
-    this.handleBarData(age, '年龄分布', demographic)
-    this.formatDemographicData(religion, 'religion', '宗教信仰', demographic)
-    this.formatDemographicData(gender, 'gender', '性别分布', demographic)
-    this.formatDemographicData(ethnicity, 'ethnicity', '种族分布', demographic)
+    this.handleBarData(show_age, '年龄分布', demographic)
+    this.formatDemographicData(show_religion, 'religion', '宗教信仰', demographic)
+    this.formatDemographicData(show_gender, 'gender', '性别分布', demographic)
+    this.formatDemographicData(show_ethnicity, 'ethnicity', '种族分布', demographic)
     this.formatDemographicData(
-      marital,
+      show_marital,
       'marital_status',
       '婚姻状况',
       demographic

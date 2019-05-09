@@ -49,14 +49,25 @@ const querySelectedDemographic = req => {
   const query = []
   Object.keys(demographicConfig).forEach(k => {
     const config = demographicConfig[k]
-    if (config.type === 'bar') {
-      query.push(
-        queryCommonFields(config, req, {
-          attributes: attributesRange(k, req.query[k][0], req.query[k][1], 5),
-        })
-      )
+    const demographicQuery = JSON.parse(req.query.demographic)
+    console.log('demographicQuery', demographicQuery, k)
+    if (demographicQuery[k].checked) {
+      if (config.type === 'bar') {
+        query.push(
+          queryCommonFields(config, req, {
+            attributes: attributesRange(
+              config.countAttribute,
+              req.query[config.countAttribute][0],
+              req.query[config.countAttribute][1],
+              5
+            ),
+          })
+        )
+      } else {
+        query.push(queryCommonFields(config, req))
+      }
     } else {
-      query.push(queryCommonFields(config, req))
+      query.push(Promise.resolve([]))
     }
     // if (req.query[k] && req.query[k].checked) {
 

@@ -1,22 +1,23 @@
 const chart_config = {
   demographic: {
-    religion: {
+    show_religion: {
       group: 'religion',
       countAttribute: 'religion'
     },
-    gender: {
+    show_gender: {
       group: 'gender',
       countAttribute: 'gender'
     },
-    marital: {
+    show_marital: {
       group: 'marital_status',
       countAttribute: 'marital_status',
     },
-    ethnicity: {
+    show_ethnicity: {
       group: 'ethnicity',
       countAttribute: 'ethnicity'
     },
-    age: {
+    show_age: {
+      countAttribute: 'age',
       type: 'bar',
       step: 5,
     }
