@@ -56,23 +56,25 @@ class Navigator extends Component {
                 </Menu.Item>
               ))}
               <Menu.Item as="a">Document</Menu.Item>
-              <Menu.Item position="right">
-                <Button
-                  primary
-                  onClick={this.props.undo}
-                  disabled={!this.props.demoGraphicHistory.past.length}
-                >
-                  UNDO撤销
-                </Button>
-                <Button
-                  style={{ marginLeft: '0.5em' }}
-                  primary
-                  onClick={this.props.redo}
-                  disabled={!this.props.demoGraphicHistory.future.length}
-                >
-                  REDO返回
-                </Button>
-              </Menu.Item>
+              {currentView === 'Explore' ? (
+                <Menu.Item position="right">
+                  <Button
+                    primary
+                    onClick={this.props.undo}
+                    disabled={!this.props.demoGraphicHistory.past.length}
+                  >
+                    UNDO撤销
+                  </Button>
+                  <Button
+                    style={{ marginLeft: '0.5em' }}
+                    primary
+                    onClick={this.props.redo}
+                    disabled={!this.props.demoGraphicHistory.future.length}
+                  >
+                    REDO返回
+                  </Button>
+                </Menu.Item>
+              ) : null}
             </Container>
           </Menu>
         </Segment>
