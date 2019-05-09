@@ -99,12 +99,12 @@ const VerticalSidebar = ({
       {Object.keys(menus).map(groupName => {
         return (
           <ToggleMenuItem itemName={groupName} key={groupName}>
-            {menus[groupName].map(({ name, cname, showStep }) => (
+            {menus[groupName].map(({ name, cname, mma }) => (
               <Selector
                 title={cname}
                 name={name}
                 key={name}
-                showStep={showStep}
+                showmma={mma}
               />
             ))}
           </ToggleMenuItem>

@@ -19,10 +19,13 @@ export default function Selector({
   optionValue,
   sliderValue,
   input,
+  mma,
+  showmma,
   icdSearched,
   showStep,
   toggle = true,
   onStepChange,
+  onMmaClick
 }) {
   return (
     <Segment style={{ marginTop: 0, borderRadius: 0, borderRightWidth: 0 }}>
@@ -31,13 +34,11 @@ export default function Selector({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginBottom: '10px'
+          marginBottom: '10px',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {toggle ? (
-            <Checkbox onChange={onToggle} checked={checked} />
-          ) : null}
+          {toggle ? <Checkbox onChange={onToggle} checked={checked} /> : null}
           <span
             style={
               checked || !toggle
@@ -48,6 +49,21 @@ export default function Selector({
             {title}
           </span>
         </div>
+        {
+          showmma ? (
+            <Button.Group>
+            {['min', 'max', 'avg'].map(btnName => (
+              <Button
+                key={btnName}
+                onClick={onMmaClick}
+                active={mma === btnName}
+              >
+                {btnName}
+              </Button>
+            ))}
+          </Button.Group>
+          ) : null
+        }
         {showStep ? (
           <>
             <Input
@@ -127,9 +143,7 @@ export default function Selector({
         </>
       ) : null}
       <div>
-        <span style={{fontSize: 16, color: '#2185D0'}}>
-          {buttonValue}
-        </span>
+        <span style={{ fontSize: 16, color: '#2185D0' }}>{buttonValue}</span>
       </div>
     </Segment>
   )

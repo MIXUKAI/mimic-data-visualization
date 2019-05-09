@@ -9,6 +9,7 @@ import {
   setOptions,
   setSlider,
   setToggle,
+  setMma
 } from './Selector.duck'
 
 class SelectorContainer extends Component {
@@ -40,6 +41,12 @@ class SelectorContainer extends Component {
     this.props.setSlider(name, values)
   }
 
+  handleMmaClick = e => {
+    const { name } = this.props
+    const mma = e.target.textContent
+    this.props.setMma(name, mma)
+  }
+
   render() {
     const { options = [] } = this.props
 
@@ -56,6 +63,7 @@ class SelectorContainer extends Component {
         onButtonClick={this.handleButtonClick}
         onOptionChange={this.handleOptionChange}
         onSliderChange={this.handleSliderChange}
+        onMmaClick={this.handleMmaClick}
       />
     )
   }
@@ -69,5 +77,5 @@ const mapState = (state, props) => {
 
 export default connect(
   mapState,
-  { setButtons, setInput, setToggle, setSlider, setOptions }
+  { setButtons, setInput, setToggle, setSlider, setOptions, setMma }
 )(SelectorContainer)
