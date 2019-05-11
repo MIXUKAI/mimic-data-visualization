@@ -17,7 +17,8 @@ class Navigator extends Component {
     const { fixed = false, currentView, toggleSidebar } = this.props
     return (
       <Visibility
-        once={false}
+        style={{ position: 'fixed', width: '100%', zIndex: 100 }}
+        // once={false}
         // onBottomPassed={this.showFixedMenu}
         // onBottomPassedReverse={this.hideFixedMenu}
       >
