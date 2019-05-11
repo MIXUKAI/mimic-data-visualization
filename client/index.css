@@ -26,3 +26,16 @@ code {
   flex-direction: column;
   justify-content: space-between; */
 }
+
+.icu-stay-info {
+  background-color: #f9f9f9;
+  border-radius: 3px;
+  padding: 5px 3px;
+  box-shadow: 0 1px 6px #bbb;
+  margin: 5px;
+}
+
+.icu-stay-info p {
+  padding: 5px;
+  font-size: 18px;
+}

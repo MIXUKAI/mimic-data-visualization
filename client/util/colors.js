@@ -44,6 +44,16 @@ export const ORANGE_SCHEMA = {
   ]
 }
 
+export const RED_SCHEMA = {
+  primary: '#CCF600',
+  linear: [
+    '#DAFB3F',
+    '#E3FB71',
+    '#85A000',
+    '#A1B92E'
+  ]
+}
+
 export const getColors = (len = 4) => {
   // const schemas = [BLUE_SCHEMA, PURPLE_SCHEMA, GREEN_SCHEMA, ORANGE_SCHEMA]
   const colors = [...BLUE_SCHEMA.linear, ...PURPLE_SCHEMA.linear, ...GREEN_SCHEMA.linear, ...ORANGE_SCHEMA.linear]

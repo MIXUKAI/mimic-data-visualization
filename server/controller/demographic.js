@@ -45,8 +45,48 @@ const queryCommonFields = (config = {}, req, addtionConfig) => {
   })
 }
 
+const queryPatientsCount = req => {
+  let where = ''
+  let index = 0
+  Object.keys(selectionConfig).forEach((k, i) => {
+    const config = selectionConfig[k]
+    const value =
+      config.type === 'slider'
+        ? req.query[k].map(v => parseInt(v))
+        : req.query[k]
+    if (value) {
+      if (index !== 0) {
+        where += ' AND '
+      }
+      index++
+      where += '('
+      if (config.where === 'between') {
+        where += `${config.filed} between ${value[0]} and ${value[1]}`
+      } else {
+        value.forEach((v, index) => {
+          if (index === 0) {
+            where += `${config.filed}='${v}' `
+          } else {
+            where += `or ${config.filed}='${v}' `
+          }
+        })
+      }
+      where += ')'
+    }
+  })
+  return new Promise((resolve, reject) => {
+    sequelize.query(`
+      SELECT count(*) as patients_count FROM (
+        SELECT DISTINCT subject_id FROM mimiciii.pai 
+        WHERE ${where}
+      ) as res;
+    `).then(res => resolve(res[0]))
+  })
+}
+
 const querySelectedDemographic = req => {
   const query = []
+  query.push(queryPatientsCount(req))
   const demographicQuery = JSON.parse(req.query.demographic)
   Object.keys(demographicConfig).forEach(k => {
     const config = demographicConfig[k]

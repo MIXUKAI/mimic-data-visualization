@@ -1,12 +1,15 @@
 const chart_config = {
+  icu_stay_info: {
+    patientsCount: {},
+  },
   demographic: {
     show_religion: {
       group: 'religion',
-      countAttribute: 'religion'
+      countAttribute: 'religion',
     },
     show_gender: {
       group: 'gender',
-      countAttribute: 'gender'
+      countAttribute: 'gender',
     },
     show_marital: {
       group: 'marital_status',
@@ -14,18 +17,18 @@ const chart_config = {
     },
     show_ethnicity: {
       group: 'ethnicity',
-      countAttribute: 'ethnicity'
+      countAttribute: 'ethnicity',
     },
     show_age: {
       countAttribute: 'age',
       type: 'bar',
       step: 5,
-    }
+    },
   },
   administrative: {
     show_icuType: {
       group: 'first_careunit',
-      countAttribute: 'first_careunit'
+      countAttribute: 'first_careunit',
     },
     show_admissionSource: {
       group: 'admission_location',
@@ -38,7 +41,7 @@ const chart_config = {
     show_insurance: {
       group: 'insurance',
       countAttribute: 'insurance',
-    }
+    },
   },
   patientsOutComes: {
     hos_los: {
@@ -48,7 +51,7 @@ const chart_config = {
     icu_los: {
       type: 'bar',
       step: 3,
-    }
+    },
   },
   vitalSign: {
     weightKg: {
@@ -74,18 +77,18 @@ const chart_config = {
     pespiratoryRate: {
       modal: 'pai_pespiratory_rate',
       range: { min: 0, max: 36, step: 4 },
-    }
+    },
   },
   miscellaneous: {
     weight: {
       type: 'bar',
-      step: 5
+      step: 5,
     },
     height: {
       type: 'bar',
-      step: 5
-    }
-  }
+      step: 5,
+    },
+  },
 }
 
 module.exports = chart_config

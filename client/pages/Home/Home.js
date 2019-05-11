@@ -22,46 +22,22 @@ class Home extends Component {
         <Container className="home-container">
           <h2 className="home-container-h2">Welcome!</h2>
           <p className="home-container-p">
-            The MIMIC II Visualization tool is a web based tool that allows
-            users to explore and compare some of the basic trends within the
-            MIMIC II database. The information presented within the tool is not
-            designed to provide every tiny detail of the database, but to allow
-            a snapshot of the data in the cohort(s) of one’s choosing. It’s
-            design is intended for any user that may be interested in health
-            care big data. However, the tool is specifically designed for
-            researchers or medical doctors that may be interested in visualizing
-            the basic information that the MIMIC II database contains. This tool
-            incorporates exploration and comparison functionality. More
-            information and instructions can be found on each respective page.
+            MIMIC II可视化工具是一个基于Web的工具，允许用户探索和比较MIMIC
+            II数据库中的一些基本趋势。该工具中提供的信息并非旨在提供数据库的每个细节，而是允许一个人选择的队列中的数据快照。它的设计适用于可能对医疗保健大数据感兴趣的任何用户。但是，该工具专为可能对MIMIC
+            II数据库所包含的基本信息可视化感兴趣的研究人员或医生设计。可在相应页面上找到更多信息和说明。
           </p>
           <p className="home-container-p">
-            Unfortunately this tool is still within its development and is still
-            rather unstable at this time. While portions of it will display and
-            render correctly, other times it will not. Should you be experience
-            a long wait in order to retrieve data (more than five minutes),
-            please refresh your page. Also of note, should your computer have a
-            smaller than average amount of memory you may experience some
-            notifications regarding JavaScript code encountering issues. Please
-            select to continue the process, as it will eventually complete.
-          </p>
-          <p className="home-container-p">
-            The tool itself is based on a Linux, Apache, Postgres, PHP (LAPP)
-            stack variant that pulls data from a server side backend to return a
-            visual result. For more information on this you can take a look at a
-            breakdown of how the tool works here.
+            该工具本身基于Linux，Apache，Postgres，Node堆栈变体，它从服务器端后端提取数据以返回可视结果。有关这方面的更多信息，您可以查看该工具的工作原理细分。
           </p>
         </Container>
         <Container className="home-container">
           <h2 className="home-container-h2">About MIMIC III</h2>
           <p className="home-container-p">
-            The MIMIC II database is a public intensive care database from Beth
-            Israel Deaconess Medical Centre in Boston, MA, USA and is maintained
-            by MIT. This tool displays aggregate patient data from version 2.6
-            of MIMIC II.
+            MIMIC是一个由麻省理工学院计算生理学实验室开发的开源数据集，它重症监护医学研究的重要数据支撑和临床科研工具，也是病人生命体征监测设备数据分析改进的重要数据源，它提供的数据集跨越十多年。其中包括了约40,000名重症监护患者相关的经鉴定的健康数据。
+            它还涵盖人口统计，生命体征，实验室测试，药物等信息。
           </p>
           <p className="home-container-p">
-            For more information about MIMIC II, please visit the official MIMIC
-            II website at: http://physionet.org/mimic2
+            更多关系MIMIC的信息请访问MIMIC-III的官方网站: <a href="https://mimic.physionet.org/">https://mimic.physionet.org/</a>
           </p>
         </Container>
       </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Grid, Button } from 'semantic-ui-react'
+import { Grid, Button, Header, Icon } from 'semantic-ui-react'
 import { Pie, Bar } from 'react-chartjs-2'
 
 import withCurrentView from '../../hoc/withCurrentView'
@@ -72,6 +72,7 @@ class Explore extends Component {
     console.log(this.props.demoGraphicHistory)
     const { modal } = this.props
     const {
+      patientsCount = [],
       show_religion = [],
       show_gender = [],
       show_ethnicity = [],
@@ -90,11 +91,22 @@ class Explore extends Component {
       height = [],
       weightKg = [],
     } = this.props.demographic
+    const pcount = patientsCount.length ? parseInt(patientsCount[0].patients_count)  : 0
     const demographic = []
     this.handleBarData(show_age, '年龄分布', demographic)
-    this.formatDemographicData(show_religion, 'religion', '宗教信仰', demographic)
+    this.formatDemographicData(
+      show_religion,
+      'religion',
+      '宗教信仰',
+      demographic
+    )
     this.formatDemographicData(show_gender, 'gender', '性别分布', demographic)
-    this.formatDemographicData(show_ethnicity, 'ethnicity', '种族分布', demographic)
+    this.formatDemographicData(
+      show_ethnicity,
+      'ethnicity',
+      '种族分布',
+      demographic
+    )
     this.formatDemographicData(
       show_marital,
       'marital_status',
@@ -183,6 +195,27 @@ class Explore extends Component {
           >
         </Modal>
 
+        {show_gender.length ? (
+          <div className="icu-stay-info">
+            <Header as="h2">
+              <Icon name="user" />
+              <Header.Content>
+                ICU Stay Information
+                <Header.Subheader>重症监护室居住的信息</Header.Subheader>
+              </Header.Content>
+            </Header>
+            <p>
+              icu总共有
+              {show_gender.reduce(
+                (p, c) => {
+                  return parseInt(p.count) + parseInt(c.count)
+                }
+              )}
+              个居住
+            </p>
+            <p>总共有{pcount}个患者</p>
+          </div>
+        ) : null}
         <Grid style={{ margin: '50px 0' }}>
           <Group
             title={{
