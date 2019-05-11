@@ -69,11 +69,6 @@ const querySelectedDemographic = req => {
     } else {
       query.push(Promise.resolve([]))
     }
-    // if (req.query[k] && req.query[k].checked) {
-
-    // } else {
-    //   query.push(Promise.resolve([]))
-    // }
   })
 
   return query

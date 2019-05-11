@@ -21,8 +21,10 @@ export const menus = {
   ],
   vitalSigns: [
     { name: 'heartRate', cname: '心率', mma: true },
-    { name: 'bloodPressure', cname: '血压', mma: true },
+    { name: 'artericalBloodPressure', cname: '血压', mma: true },
     { name: 'pespiratoryRate', cname: '呼吸频率', mma: true },
     { name: 'temperature', cname: '体温', mma: true },
+    { name: 'height', cname: '身高(cm)', mma: true },
+    { name: 'weightKg', cname: '体重(kg)', mma: true },
   ]
 }

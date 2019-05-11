@@ -70,7 +70,7 @@ const { attributesRange, range } = require('../util')
 //   })
 // }
 
-const queryEvents = (config, req) => {
+const queryEvents = (config, req, mma) => {
   const { modal } = config
   let where = ''
   let index = 0
@@ -104,7 +104,7 @@ const queryEvents = (config, req) => {
   return new Promise((resolve, reject) => {
     sequelize.query(`
       SELECT ${range('valuenum', 30, 100, 10)} FROM (
-        SELECT max(valuenum) as valuenum FROM mimiciii.${modal} 
+        SELECT ${mma}(valuenum) as valuenum FROM mimiciii.${modal} 
         WHERE ${where} group by icustay_id
       ) as res;
     `).then(res => resolve(res[0]))
@@ -119,10 +119,15 @@ const queryEvents = (config, req) => {
 const queryVitalSign = req => {
   const query = []
   Object.keys(vitalSignConfig).forEach(k => {
-    const config = vitalSignConfig[k]
-    query.push(
-      queryEvents(config, req)
-    )
+    const VitalSignQuery = JSON.parse(req.query.vitalSigns)
+    if (VitalSignQuery[k].checked) {
+      const config = vitalSignConfig[k]
+      query.push(
+        queryEvents(config, req, VitalSignQuery[k].mma)
+      )
+    } else {
+      query.push(Promise.resolve([]))
+    }
   })
 
   return query
