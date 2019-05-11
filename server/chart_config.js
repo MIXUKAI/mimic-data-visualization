@@ -23,19 +23,19 @@ const chart_config = {
     }
   },
   administrative: {
-    icuType: {
+    show_icuType: {
       group: 'first_careunit',
       countAttribute: 'first_careunit'
     },
-    admissionLocation: {
+    show_admissionSource: {
       group: 'admission_location',
       countAttribute: 'admission_location',
     },
-    admissionType: {
+    show_admissionType: {
       group: 'admission_type',
       countAttribute: 'admission_type',
     },
-    insurance: {
+    show_insurance: {
       group: 'insurance',
       countAttribute: 'insurance',
     }
@@ -53,21 +53,27 @@ const chart_config = {
   vitalSign: {
     weightKg: {
       modal: 'pai_weight_kg',
+      range: { min: 22, max: 140, step: 13 },
     },
     height: {
-      modal: 'pai_height_cm'
+      modal: 'pai_height_cm',
+      range: { min: 136, max: 191, step: 5 },
     },
     heartRate: {
-      modal: 'pai_heart_rate'
+      modal: 'pai_heart_rate',
+      range: { min: 28, max: 136, step: 12 },
     },
     artericalBloodPressure: {
-      modal: 'pai_arterical_blood_pressure'
+      modal: 'pai_arterical_blood_pressure',
+      range: { min: 27, max: 127, step: 11 },
     },
     temperature: {
-      modal: 'pai_temperature_c'
+      modal: 'pai_temperature_c',
+      range: { min: 35, max: 40, step: 1 },
     },
     pespiratoryRate: {
-      modal: 'pai_pespiratory_rate'
+      modal: 'pai_pespiratory_rate',
+      range: { min: 0, max: 36, step: 4 },
     }
   },
   miscellaneous: {

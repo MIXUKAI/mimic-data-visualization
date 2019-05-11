@@ -12,12 +12,12 @@ export const menus = {
     { name: 'show_admissionType', title: 'Admission Type', cname: 'Admission类型' },
     { name: 'show_insurance', title: 'Insurance Type', cname: '保险类型' },
   ],
-  patientOutcomes: [
+  patientsOutComes: [
     { name: 'show_28mortality', title: '28 Day Mortality', cname: '28天死亡率' },
-    { name: 'show_hospitalLenStay', title: 'Hospital Length of Stay', cname: '医院时长'},
+    { name: 'hos_los', title: 'Hospital Length of Stay', cname: '医院时长'},
     { name: 'show_hospitalMortality', title: 'Hospital Mortality', cname: '医院死亡率' },
     { name: 'show_icuMortality', title: 'ICU Mortality', cname: '重症监护室死亡率比' },
-    { name: 'show_icuLenStay', title: 'ICU Length of Stay', cname: '重症监护室时长' },
+    { name: 'icu_los', title: 'ICU Length of Stay', cname: '重症监护室时长' },
   ],
   vitalSigns: [
     { name: 'heartRate', cname: '心率', mma: true },

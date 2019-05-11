@@ -3,8 +3,13 @@ const { queryCommonFields } = require('./demographic')
 
 const querySelectedAdministrative = (req) => {
   const query = []
+  const administrativeQuery = JSON.parse(req.query.administrative)
   Object.keys(administrativeConfig).forEach(k => {
-    query.push(queryCommonFields(administrativeConfig[k], req))
+    if (administrativeQuery[k].checked) {
+      query.push(queryCommonFields(administrativeConfig[k], req))
+    } else {
+      query.push(Promise.resolve([]))
+    }
   })
   return query
 }

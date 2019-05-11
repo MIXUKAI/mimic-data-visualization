@@ -77,10 +77,10 @@ class Explore extends Component {
       show_ethnicity = [],
       show_marital = [],
       show_age = [],
-      icuType = [],
-      insurance = [],
-      admissionType = [],
-      admissionLocation = [],
+      show_icuType = [],
+      show_insurance = [],
+      show_admissionType = [],
+      show_admissionSource = [],
       hos_los = [],
       icu_los = [],
       heartRate = [],
@@ -104,26 +104,26 @@ class Explore extends Component {
 
     const administrative = []
     this.formatDemographicData(
-      icuType,
+      show_icuType,
       'first_careunit',
       '重症监护室类型',
       administrative,
       'Bar'
     )
     this.formatDemographicData(
-      admissionLocation,
+      show_admissionSource,
       'admission_location',
       '入住地点',
       administrative
     )
     this.formatDemographicData(
-      admissionType,
+      show_admissionType,
       'admission_type',
       '入住类型',
       administrative
     )
     this.formatDemographicData(
-      insurance,
+      show_insurance,
       'insurance',
       '保险类型',
       administrative

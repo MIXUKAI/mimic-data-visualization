@@ -47,9 +47,9 @@ const queryCommonFields = (config = {}, req, addtionConfig) => {
 
 const querySelectedDemographic = req => {
   const query = []
+  const demographicQuery = JSON.parse(req.query.demographic)
   Object.keys(demographicConfig).forEach(k => {
     const config = demographicConfig[k]
-    const demographicQuery = JSON.parse(req.query.demographic)
     console.log('demographicQuery', demographicQuery, k)
     if (demographicQuery[k].checked) {
       if (config.type === 'bar') {
